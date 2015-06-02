@@ -1,3 +1,9 @@
+02-Jun-2015  Alexandre Trilla  <alex@atrilla.net>
+
+  * include/Unit.h (UT_New, UT_In, UT_SetW, UT_GetW, UT_Out, UT_Up):
+    created.
+
+
 01-Jun-2015  Alexandre Trilla  <alex@atrilla.net>
 
   * include/Unit.h: created.

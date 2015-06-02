@@ -30,18 +30,53 @@
 #ifndef UNIT_H
 #define UNIT_H
 
+typedef double (*fp)(double x); // Function pointer.
+
 typedef struct {
   double **in; // List of input refs.
   int nin; // Number of inputs.
   double *w; // Input weights.
   double out; // Output.
-  double (*g)(double x); // Activation function.
+  fp g; // Activation function.
 } Unit;
 
 /**
- * @post Compute the weighted sum of inputs.
+ * @pre numin >= 1
+ * @pre 0 < winit < 1
+ * @pre f must be a valid activation function.
+ * @post Create a new unit in heap.
+ * @post Weights set to U[-winit, winit].
  */
-double UT_WSum(Unit *ut);
+Unit* UT_New(int numin, double winit, fp f);
+
+/**
+ * @pre input must point to allocated number.
+ * @pre idx = [0 .. nin-1]
+ * @post Set input ref.
+ */
+void UT_In(Unit *ut, const double *input, int idx);
+
+/**
+ * @pre idx = [0 .. nin-1]
+ * @post Set weight for corresponding input idx.
+ */
+void UT_SetW(Unit *ut, double wval, int idx);
+
+/**
+ * @pre idx = [0 .. nin-1]
+ * @post Get weight for corresponding input idx.
+ */
+double UT_GetW(const Unit *ut, int idx);
+
+/**
+ * @post Compute output.
+ */
+double UT_Out(const Unit *ut);
+
+/**
+ * @post Update output.
+ */
+void UT_Up(Unit *ut, double y);
 
 #endif
 
