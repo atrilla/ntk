@@ -46,6 +46,7 @@ typedef struct {
  * @pre f must be a valid activation function.
  * @post Create a new unit in heap.
  * @post Weights set to U[-winit, winit].
+ * @post Output set to 0.
  */
 Unit* UT_New(int numin, double winit, fp f);
 
@@ -74,9 +75,15 @@ double UT_GetW(const Unit *ut, int idx);
 double UT_Out(const Unit *ut);
 
 /**
+ * @pre y must be a valid activation value.
  * @post Update output.
  */
 void UT_Up(Unit *ut, double y);
+
+/**
+ * @post Delete (deallocate) unit.
+ */
+void UT_Del(Unit *ut);
 
 #endif
 
