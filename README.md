@@ -6,8 +6,8 @@ for neural computation.
 
 The NTK software toolkit is a framework that facilitates the creation 
 and evaluation of bespoke neural network models. It is designed to be 
-flexible and adaptable. Developed in ANSI C. Intensive computation
-and portability are taken into account.
+flexible and adaptable. Developed in C. Intensive computation and
+portability are taken into account.
 
 
 Mission

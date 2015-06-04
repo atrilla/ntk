@@ -62,21 +62,18 @@ Unit* UT_New(int numin, double winit, fp f) {
   return ut;
 }
 
-void UT_In(Unit *ut, const double *input, int idx) {
-}
-
-void UT_SetW(Unit *ut, double wval, int idx) {
-}
-
-double UT_GetW(const Unit *ut, int idx) {
-}
-
-double UT_Out(const Unit *ut) {
-}
-
-void UT_Up(Unit *ut, double y) {
-}
-
 void UT_Del(Unit *ut) {
+  free(ut->in);
+  free(ut->w);
+  free(ut);
+}
+
+double UT_Eval(Unit *ut) {
+  double sws = 0.0; // squased weighted sum
+  int i;
+  for (i = 0; i < ut->nin; i++) {
+    sws += ut->w[i] * (*ut->in[i]);
+  }
+  return ut->g(sws);
 }
 

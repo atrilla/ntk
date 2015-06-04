@@ -1,6 +1,6 @@
 /*********************************************************************
-  File    : Unit.h
-  Created : 01-Jun-2015
+  File    : linfunc.c
+  Created : 04-Jun-2015
   By      : Alexandre Trilla <alex@atrilla.net>
 
   NTK - Neural Network Toolkit
@@ -22,43 +22,30 @@
 
 *********************************************************************/
 
-/**
- * @brief Unit (UT), general computation element.
- * @author Alexandre Trilla
- */
+// Test unit with function
+// y = 2x + 1
 
-#ifndef UNIT_H
-#define UNIT_H
+#include "Unit.h"
+#include <stdio.h>
 
-typedef double (*fp)(double x); // Function pointer.
+double lin(double x) {
+  return x;
+}
 
-typedef struct {
-  double **in; // List of input refs.
-  int nin; // Number of inputs.
-  double *w; // Input weights.
-  double out; // Output.
-  fp g; // Activation function.
-} Unit;
-
-/**
- * @pre numin >= 1
- * @pre 0 < winit < 1
- * @pre f must be a valid activation function.
- * @post Create a new unit in heap.
- * @post Weights set to U[-winit, winit].
- * @post Output set to 0.
- */
-Unit* UT_New(int numin, double winit, fp f);
-
-/**
- * @post Delete (deallocate) unit.
- */
-void UT_Del(Unit *ut);
-
-/**
- * @post Evaluate unit.
- */
-double UT_Eval(Unit *ut);
-
-#endif
+int main() {
+  double in[2] = {1.0, 0.0};
+  Unit *ut = UT_New(2, 0.2, lin);
+  int i;
+  ut->in[0] = in;
+  ut->in[1] = in + 1;
+  ut->w[0] = 1;
+  ut->w[1] = 2;
+  printf("Linear unit implementing f(x) = 2x + 1\n");
+  printf("x\tf(x)\n");
+  for (i = 0; i < 10; i++) {
+    in[1] = (double)i;
+    printf("%.4f\t%.4f\n", (double)i, UT_Eval(ut));
+  }
+  return 0;
+}
 

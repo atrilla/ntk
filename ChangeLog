@@ -1,3 +1,12 @@
+04-Jun-2015  Alexandre Trilla  <alex@atrilla.net>
+
+  * include/Unit.h (UT_In, UT_SetW, UT_GetW, UT_Out, UT_Up): deleted.
+  * include/Unit.h (UT_Eval): created.
+  * src/Unit.c (UT_Del, UT_Eval)
+
+  * test/linfunc.c: created.
+
+
 03-Jun-2015  Alexandre Trilla  <alex@atrilla.net>
 
   * include/Unit.h (UT_Del): created.
