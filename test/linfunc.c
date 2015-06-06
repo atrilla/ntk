@@ -34,18 +34,20 @@ double lin(double x) {
 
 int main() {
   double in[2] = {1.0, 0.0};
-  Unit *ut = UT_New(2, 0.2, lin);
+  Unit ut;
+  UT_New(&ut, 2, 0.2, lin);
   int i;
-  ut->in[0] = in;
-  ut->in[1] = in + 1;
-  ut->w[0] = 1;
-  ut->w[1] = 2;
+  ut.in[0] = in;
+  ut.in[1] = in + 1;
+  ut.w[0] = 1;
+  ut.w[1] = 2;
   printf("Linear unit implementing f(x) = 2x + 1\n");
   printf("x\tf(x)\n");
   for (i = 0; i < 10; i++) {
     in[1] = (double)i;
-    printf("%.4f\t%.4f\n", (double)i, UT_Eval(ut));
+    printf("%.4f\t%.4f\n", (double)i, UT_Eval(&ut));
   }
+  UT_Del(&ut);
   return 0;
 }
 

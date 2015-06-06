@@ -44,11 +44,11 @@ typedef struct {
  * @pre numin >= 1
  * @pre 0 < winit < 1
  * @pre f must be a valid activation function.
- * @post Create a new unit in heap.
+ * @post Init a new unit.
  * @post Weights set to U[-winit, winit].
  * @post Output set to 0.
  */
-Unit* UT_New(int numin, double winit, fp f);
+void UT_New(Unit *ut, int numin, double winit, fp f);
 
 /**
  * @post Delete (deallocate) unit.

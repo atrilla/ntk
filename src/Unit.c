@@ -27,45 +27,35 @@
 #include <stdio.h>
 #include "Unit.h"
 
-Unit* UT_New(int numin, double winit, fp f) {
+void UT_New(Unit *ut, int numin, double winit, fp f) {
   double r;
   int i;
-  Unit *ut = malloc(sizeof(Unit));
-  if (ut != NULL) {
-    ut->nin = numin;
-    ut->out = 0.0;
-    ut->g = f;
-    ut->in = malloc(numin * sizeof(double*));
-    if (ut->in != NULL) {
-      ut->w = malloc(numin * sizeof(double));
-      if (ut->w != NULL) {
-        srand(time(NULL));
-        for (i = 0; i < numin; i++) {
-          ut->w[i] = (((double)rand() / (double)RAND_MAX) - 0.5) *
-            (winit/2);
-        }
-      } else {
-        printf("New Unit->w failed!\n");
-        free(ut->in);
-        free(ut);
-        exit(EXIT_FAILURE);
+  ut->nin = numin;
+  ut->out = 0.0;
+  ut->g = f;
+  ut->in = malloc(numin * sizeof(double*));
+  if (ut->in != NULL) {
+    ut->w = malloc(numin * sizeof(double));
+    if (ut->w != NULL) {
+      srand(time(NULL));
+      for (i = 0; i < numin; i++) {
+        ut->w[i] = (((double)rand() / (double)RAND_MAX) - 0.5) *
+          (winit/2);
       }
     } else {
-      printf("New Unit->in failed!\n");
-      free(ut);
+      printf("New Unit->w failed!\n");
+      free(ut->in);
       exit(EXIT_FAILURE);
     }
   } else {
-    printf("New Unit failed!\n");
+    printf("New Unit->in failed!\n");
     exit(EXIT_FAILURE);
   }
-  return ut;
 }
 
 void UT_Del(Unit *ut) {
   free(ut->in);
   free(ut->w);
-  free(ut);
 }
 
 double UT_Eval(Unit *ut) {
