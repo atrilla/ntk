@@ -28,7 +28,6 @@
 #include "Unit.h"
 
 void UT_New(Unit *ut, int numin, double winit, fp f) {
-  double r;
   int i;
   ut->nin = numin;
   ut->out = 0.0;

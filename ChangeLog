@@ -1,3 +1,13 @@
+07-Jun-2015  Alexandre Trilla  <alex@atrilla.net>
+
+  * include/Activ.h: created.
+  * src/Activ.c
+  * test/linfunc.c (main)
+
+  * include/Network.h: created.
+  * src/Network.c
+
+
 06-Jun-2015  Alexandre Trilla  <alex@atrilla.net>
 
   * include/Unit.h (UT_New): init behaviour, void return.

@@ -1,6 +1,6 @@
 /*********************************************************************
-  File    : linfunc.c
-  Created : 04-Jun-2015
+  File    : Network.h
+  Created : 07-Jun-2015
   By      : Alexandre Trilla <alex@atrilla.net>
 
   NTK - Neural Network Toolkit
@@ -22,29 +22,30 @@
 
 *********************************************************************/
 
-// Test unit with function
-// y = 2x + 1
+/**
+ * @brief Network (NT), general unit set.
+ * @author Alexandre Trilla
+ */
+
+#ifndef NETWORK_H
+#define NETWORK_H
 
 #include "Unit.h"
-#include "Activ.h"
-#include <stdio.h>
 
-int main() {
-  double in[2] = {1.0, 0.0};
-  Unit ut;
-  UT_New(&ut, 2, 0.2, AF_Linear);
-  int i;
-  ut.in[0] = in;
-  ut.in[1] = in + 1;
-  ut.w[0] = 1;
-  ut.w[1] = 2;
-  printf("Linear unit implementing f(x) = 2x + 1\n");
-  printf("x\tf(x)\n");
-  for (i = 0; i < 10; i++) {
-    in[1] = (double)i;
-    printf("%.4f\t%.4f\n", (double)i, UT_Eval(&ut));
-  }
-  UT_Del(&ut);
-  return 0;
-}
+typedef struct {
+  Unit *ut; // Unit set.
+  int nut; // Number of units.
+} Network;
+
+/**
+ * @post Synchronous update.
+ */
+void NT_Sync(Network *nt);
+
+/**
+ * @post Asynchronous update (one random unit).
+ */
+void NT_Async(Network *nt);
+
+#endif
 

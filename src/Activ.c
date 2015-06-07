@@ -1,6 +1,6 @@
 /*********************************************************************
-  File    : linfunc.c
-  Created : 04-Jun-2015
+  File    : Activ.c
+  Created : 07-Jun-2015
   By      : Alexandre Trilla <alex@atrilla.net>
 
   NTK - Neural Network Toolkit
@@ -22,29 +22,17 @@
 
 *********************************************************************/
 
-// Test unit with function
-// y = 2x + 1
-
-#include "Unit.h"
 #include "Activ.h"
-#include <stdio.h>
 
-int main() {
-  double in[2] = {1.0, 0.0};
-  Unit ut;
-  UT_New(&ut, 2, 0.2, AF_Linear);
-  int i;
-  ut.in[0] = in;
-  ut.in[1] = in + 1;
-  ut.w[0] = 1;
-  ut.w[1] = 2;
-  printf("Linear unit implementing f(x) = 2x + 1\n");
-  printf("x\tf(x)\n");
-  for (i = 0; i < 10; i++) {
-    in[1] = (double)i;
-    printf("%.4f\t%.4f\n", (double)i, UT_Eval(&ut));
+double AF_Linear(double x) {
+  return x;
+}
+
+double AF_Step(double x) {
+  double r = 0;
+  if (x >= 0) {
+    r = 1;
   }
-  UT_Del(&ut);
-  return 0;
+  return r;
 }
 

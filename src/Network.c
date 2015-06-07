@@ -1,6 +1,6 @@
 /*********************************************************************
-  File    : linfunc.c
-  Created : 04-Jun-2015
+  File    : Network.c
+  Created : 07-Jun-2015
   By      : Alexandre Trilla <alex@atrilla.net>
 
   NTK - Neural Network Toolkit
@@ -22,29 +22,32 @@
 
 *********************************************************************/
 
-// Test unit with function
-// y = 2x + 1
-
-#include "Unit.h"
-#include "Activ.h"
+#include <stdlib.h>
+#include <time.h>
 #include <stdio.h>
+#include "Unit.h"
+#include "Network.h"
 
-int main() {
-  double in[2] = {1.0, 0.0};
-  Unit ut;
-  UT_New(&ut, 2, 0.2, AF_Linear);
+void NT_Sync(Network *nt) {
+  double *tmp = malloc(nt->nut * sizeof(double));
   int i;
-  ut.in[0] = in;
-  ut.in[1] = in + 1;
-  ut.w[0] = 1;
-  ut.w[1] = 2;
-  printf("Linear unit implementing f(x) = 2x + 1\n");
-  printf("x\tf(x)\n");
-  for (i = 0; i < 10; i++) {
-    in[1] = (double)i;
-    printf("%.4f\t%.4f\n", (double)i, UT_Eval(&ut));
+  if (tmp != NULL) {
+    for (i = 0; i < nt->nut; i++) {
+      tmp[i] = UT_Eval(nt->ut + i);
+    }
+    for (i = 0; i < nt->nut; i++) {
+      nt->ut[i].out = tmp[i];
+    }
+  } else {
+    printf("Sync network update failed!\n");
+    exit(EXIT_FAILURE);
   }
-  UT_Del(&ut);
-  return 0;
+}
+
+void NT_Async(Network *nt) {
+  int r;
+  srand(time(NULL));
+  r = rand() % nt->nut;
+  nt->ut[r].out = UT_Eval(nt->ut + r);
 }
 
