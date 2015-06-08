@@ -13,8 +13,7 @@ buildlib:
 	ar -cvq dist/$(OBJLIB) build/*.o
 
 buildtest: buildlib
-	gcc -std=c99 -Iinclude -o $(basename $(TESTS)) $(TESTS) dist/$(OBJLIB)
-	mv $(basename $(TESTS)) build/
+	@$(foreach t, $(TESTS), gcc -std=c99 -Iinclude -o $(basename $(t)) $(t) dist/$(OBJLIB); mv $(basename $(t)) build/;)
 
 doc:
 	doxygen config/ntk.dox.cfg

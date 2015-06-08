@@ -46,7 +46,11 @@ void NT_Sync(Network *nt) {
 
 void NT_Async(Network *nt) {
   int r;
-  srand(time(NULL));
+  static char firstime = 1;
+  if (firstime) {
+    srand(time(NULL));
+    firstime = 0;
+  }
   r = rand() % nt->nut;
   nt->ut[r].out = UT_Eval(nt->ut + r);
 }
