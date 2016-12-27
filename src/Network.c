@@ -38,6 +38,7 @@ void NT_Sync(Network *nt) {
     for (i = 0; i < nt->nut; i++) {
       nt->ut[i].out = tmp[i];
     }
+    free(tmp);
   } else {
     printf("Sync network update failed!\n");
     exit(EXIT_FAILURE);

@@ -1,3 +1,8 @@
+27-Dec-2015  Alexandre Trilla  <alex@atrilla.net>
+
+  * src/Network.c (NT_Sync): memory leak on tmp.
+
+
 08-Jun-2015  Alexandre Trilla  <alex@atrilla.net>
 
   * src/Network.c (NT_Async): static srand init.
