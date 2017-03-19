@@ -5,7 +5,7 @@
 
   NTK - Neural Network Toolkit
 
-  Copyright (C) 2015 A.I. Maker
+  Copyright (C) 2015 Alexandre Trilla
 
   --------------------------------------------------------------------
 
@@ -58,7 +58,7 @@ void UT_Del(Unit *ut) {
 }
 
 double UT_Eval(Unit *ut) {
-  double sws = 0.0; // squased weighted sum
+  double sws = 0.0; // squashed weighted sum
   int i;
   for (i = 0; i < ut->nin; i++) {
     sws += ut->w[i] * (*ut->in[i]);

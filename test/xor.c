@@ -5,7 +5,7 @@
 
   NTK - Neural Network Toolkit
 
-  Copyright (C) 2015 A.I. Maker
+  Copyright (C) 2015 Alexandre Trilla
 
   --------------------------------------------------------------------
 

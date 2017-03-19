@@ -7,7 +7,7 @@ for neural computation.
 The NTK software toolkit is a framework that facilitates the creation 
 and evaluation of bespoke neural network models. It is designed to be 
 flexible and adaptable. Developed in C. Intensive computation and
-portability are taken into account.
+portability purposes are taken into account.
 
 
 Mission
@@ -15,6 +15,8 @@ Mission
 To provide a highly performant open-source implementation of neural
 networks. Related references:
 
+* Wang, H. and Raj B., "On the Origin of Deep Learning", 
+arXiv:1702.07800v2, 2017.
 * Hertz, J., Krogh, A. and Palmer, R. G., "Introduction to the theory
 of neural computation", Addison-Wesley, 1991.
 
@@ -29,9 +31,9 @@ Developer guidelines
 ### Install ###
 Requirements:
 
-* gcc 4.6.3
+* gcc 4.8.4
 * GNU Make 3.81
-* Doxygen 1.7.6.1
+* Doxygen 1.8.6
 
 Compilation:
 
