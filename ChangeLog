@@ -1,3 +1,8 @@
+29-Mar-2017  Alexandre Trilla  <alex@atrilla.net>
+
+  * explore/NeuralNetwork.py: created.
+
+
 27-Dec-2015  Alexandre Trilla  <alex@atrilla.net>
 
   * src/Network.c (NT_Sync): memory leak on tmp.
