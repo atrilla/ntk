@@ -21,10 +21,38 @@
 #
 # -----------------------------------------------------------------------
 
-class NeuralNetwork:
-	# Multilayer Perceptron, sigmoid activation
+# Multilayer Perceptron, sigmoid activation
+
+import numpy as np
+
+# inilay, list with layer units, eg, [2,4,1], hidden layer with 4 units
+# return neural net instance
+def Multilayer(inilay):
 	layer = []
+	for i,o in zip(inilay, inilay[1:]):
+		layer.append(InitWeight(i+1, o))
+	return layer
 
-	def __init__(self, inilay):
-		# inilay, list with layer units
+# L is the neuron size of the layers
+def InitWeight(Lin, Lout):
+	epsilon = np.sqrt(6) / np.sqrt(Lin + Lout);
+	return np.random.uniform(-epsilon, epsilon, [Lout, Lin])
 
+# Feed forward
+# x is ndarray
+# nn is neural net instance
+def Predict(nn, x):
+	ain = x.tolist()
+	ain.insert(0, 1)
+	a = np.array(ain)
+	for l in nn:
+		z = l.dot(a)
+		g = Sigmoid(z)
+		ahid = g.tolist()
+		ahid.insert(0,1)
+		a = np.array(ahid)
+	return a[1:]
+
+# activation function
+def Sigmoid(x):
+	return 1.0 / (1.0 + np.exp(-x))
