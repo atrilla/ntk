@@ -6,8 +6,8 @@ for neural computation.
 
 The NTK software toolkit is a framework that facilitates the creation 
 and evaluation of bespoke neural network models. It is designed to be 
-flexible and adaptable. Developed in C. Intensive computation and
-portability purposes are taken into account.
+flexible and adaptable. Experimental work developed in Python. Low-level
+implementation in C.
 
 
 Mission
@@ -29,33 +29,18 @@ All algorithms described in the aforementioned references (planned).
 Developer guidelines
 --------------------
 ### Install ###
-Requirements:
+Requirements for Python:
+
+* Python 2.7.6
+* Numpy 1.8.2
+* Scikit-learn 2.7.6
+
+
+Requirements for C:
 
 * gcc 4.8.4
 * GNU Make 3.81
 * Doxygen 1.8.6
-
-Compilation:
-
-* Binaries (library and tests): make
-* Documentation: make doc
-* Cleaning: make clean
-
-### Hacking ###
-File organisation of this source code distribution of NTK:
-
-* **ntk/** Root directory of the NTK project.
-* **build/** Generated object code binaries.
-* **ChangeLog** Record of source changes.
-* **config/** Configuration files.
-* **COPYING** Rights granted with this source code distribution.
-* **dist/** Built library.
-* **doc/** Generated documentation in HTML format.
-* **include/** Source headers.
-* **Makefile** Build process instructions.
-* **README.md** General description of NTK.
-* **src/** Source code files.
-* **test/** Sources of the tests.
 
 
 Development status

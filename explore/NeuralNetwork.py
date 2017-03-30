@@ -67,8 +67,9 @@ def Sigmoid(x):
 def Error(nn, o, t):
 	err = []
 	err.append(t - o)
-	for l in nn[1:]:
-		err.append(err[-1].dot(l))
+	for l in reversed(nn[1:]):
+		aux = err[-1].dot(l)
+		err.append(aux[1:])
 	err.reverse()
 	return err
 
@@ -91,10 +92,7 @@ def Backprop(nn, x, t, lam, nepoch, eta):
 				xx.insert(0, 1)
 				xx = np.array(xx)
 				for i in xrange(delta.shape[0]):
-					if lind != len(nn)-1:
-						delta[i] *= eta * xx * err[lind][i+1] * o[lind+1][i] * (1 - o[lind+1][i])
-					else:
-						delta[i] *= eta * xx * err[lind][i] * o[lind+1][i] * (1 - o[lind+1][i])
+					delta[i] *= eta * xx * err[lind][i] * o[lind+1][i] * (1 - o[lind+1][i])
 				nn[lind] += delta
 		print("J = " + str(Cost(nn, x, t)))
 
