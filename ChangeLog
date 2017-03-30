@@ -1,3 +1,8 @@
+30-Mar-2017  Alexandre Trilla  <alex@atrilla.net>
+
+  * explore/NeuralNetwork.py: Predict (input), Error, Backprop, Cost.
+
+
 29-Mar-2017  Alexandre Trilla  <alex@atrilla.net>
 
   * explore/NeuralNetwork.py: created (Multilayer, InitWeight, Predict,

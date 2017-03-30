@@ -41,18 +41,69 @@ def InitWeight(Lin, Lout):
 # Feed forward
 # x is ndarray
 # nn is neural net instance
+# return list of all neuron output values maintaining layer order
 def Predict(nn, x):
+	neuron = [x]
 	ain = x.tolist()
 	ain.insert(0, 1)
 	a = np.array(ain)
 	for l in nn:
 		z = l.dot(a)
 		g = Sigmoid(z)
+		neuron.append(g)
 		ahid = g.tolist()
 		ahid.insert(0,1)
 		a = np.array(ahid)
-	return a[1:]
+	return neuron
 
 # activation function
 def Sigmoid(x):
 	return 1.0 / (1.0 + np.exp(-x))
+
+# errors
+# nn neural net instance
+# o network output prediction
+# t targets
+def Error(nn, o, t):
+	err = []
+	err.append(t - o)
+	for l in nn[1:]:
+		err.append(err[-1].dot(l))
+	err.reverse()
+	return err
+
+# Learning, training online
+# nn neuralnet instance
+# x is features
+# t is targets
+# lam is Tikhonov regularisation
+# nepoch is num of iteration over the dataset
+# eta is lerning rate
+def Backprop(nn, x, t, lam, nepoch, eta):
+	for epoch in xrange(nepoch):
+		for xi,ti in zip(x,t):
+			o = Predict(nn, xi)
+			err = Error(nn, o[-1], ti)
+			for lind in xrange(len(nn)):
+				l = nn[lind]
+				delta = np.ones(l.shape)
+				xx = o[lind].tolist()
+				xx.insert(0, 1)
+				xx = np.array(xx)
+				for i in xrange(delta.shape[0]):
+					if lind != len(nn)-1:
+						delta[i] *= eta * xx * err[lind][i+1] * o[lind+1][i] * (1 - o[lind+1][i])
+					else:
+						delta[i] *= eta * xx * err[lind][i] * o[lind+1][i] * (1 - o[lind+1][i])
+				nn[lind] += delta
+		print("J = " + str(Cost(nn, x, t)))
+
+# cost, sqerr
+def Cost(nn, x, t):
+	sqerr = 0
+	for xi,ti in zip(x,t):
+		o = Predict(nn, xi)
+		err = Error(nn, o[-1], ti)
+		sqerr += np.sum(err[-1]**2)
+	sqerr = sqerr / t.shape[0]
+	return sqerr
