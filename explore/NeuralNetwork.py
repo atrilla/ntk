@@ -82,6 +82,7 @@ def Error(nn, o, t):
 # eta is lerning rate
 def Backprop(nn, x, t, lam, nepoch, eta):
 	for epoch in xrange(nepoch):
+		# example fitting
 		for xi,ti in zip(x,t):
 			o = Predict(nn, xi)
 			err = Error(nn, o[-1], ti)
@@ -94,14 +95,21 @@ def Backprop(nn, x, t, lam, nepoch, eta):
 				for i in xrange(delta.shape[0]):
 					delta[i] *= eta * xx * err[lind][i] * o[lind+1][i] * (1 - o[lind+1][i])
 				nn[lind] += delta
-		print("J = " + str(Cost(nn, x, t)))
+		# regularisation
+		for l in nn:
+			l -= eta * lam * l
+		print("J = " + str(Cost(nn, x, t, lam)))
 
 # cost, sqerr
-def Cost(nn, x, t):
+def Cost(nn, x, t, lam):
 	sqerr = 0
 	for xi,ti in zip(x,t):
 		o = Predict(nn, xi)
 		err = Error(nn, o[-1], ti)
 		sqerr += np.sum(err[-1]**2)
 	sqerr = sqerr / t.shape[0]
+	reg = 0
+	for l in nn:
+		aux = l.flatten()
+		reg += aux.dot(aux)
 	return sqerr

@@ -23,6 +23,8 @@
 
 import NeuralNetwork
 from sklearn import datasets as dset
+from sklearn.cross_validation import StratifiedShuffleSplit
+from sklearn.metrics import accuracy_score
 import numpy as np
 
 iris = dset.load_iris()
@@ -35,8 +37,19 @@ for i in iris.target:
 	else:
 		t.append([0,0,1])
 
-t = np.array(t)
+y = np.array(t)
+X = iris.data
 
-nn = NeuralNetwork.Multilayer([4,5,4,3])
-NeuralNetwork.Backprop(nn, iris.data, t, 0, 200, 0.01)
+lam = 0.1
+
+sss = StratifiedShuffleSplit(y, 1, test_size=0.3, random_state=0)
+for train_index, test_index in sss:
+	X_train, X_test = X[train_index], X[test_index]
+	y_train, y_test = y[train_index], y[test_index]
+	nn = NeuralNetwork.Multilayer([4,4,3])
+	print("Training...")
+	NeuralNetwork.Backprop(nn, X_train, y_train, lam, 50, 0.1)
+	print("Testing...")
+	tcost = NeuralNetwork.Cost(nn, X_test, y_test, lam)
+	print("J = " + str(tcost))
 

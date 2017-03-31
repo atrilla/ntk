@@ -1,8 +1,17 @@
+31-Mar-2017  Alexandre Trilla  <alex@atrilla.net>
+
+  * explore/NeuralNetwork.py (Backprop, Cost): regularisation.
+
+  * explore/test_iris.py: cross-validation.
+
+
 30-Mar-2017  Alexandre Trilla  <alex@atrilla.net>
 
   * explore/NeuralNetwork.py (Predict): input.
   * explore/NeuralNetwork.py (Error, Backprop): layer management.
   * explore/NeuralNetwork.py (Cost): created.
+
+  * explore/test_iris.py: created.
 
 
 29-Mar-2017  Alexandre Trilla  <alex@atrilla.net>
