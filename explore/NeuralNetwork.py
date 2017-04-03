@@ -24,6 +24,7 @@
 # Multilayer Perceptron, sigmoid activation
 
 import numpy as np
+import time
 
 # inilay, list with layer units, eg, [2,4,1], hidden layer with 4 units
 # return neural net instance
@@ -81,6 +82,7 @@ def Error(nn, o, t):
 # nepoch is num of iteration over the dataset
 # eta is lerning rate
 def Backprop(nn, x, t, lam, nepoch, eta):
+	tics = time.time()
 	for epoch in xrange(nepoch):
 		# example fitting
 		for xi,ti in zip(x,t):
@@ -94,11 +96,12 @@ def Backprop(nn, x, t, lam, nepoch, eta):
 				xx = np.array(xx)
 				for i in xrange(delta.shape[0]):
 					delta[i] *= eta * xx * err[lind][i] * o[lind+1][i] * (1 - o[lind+1][i])
-				nn[lind] += delta
+				l += delta
 		# regularisation
 		for l in nn:
 			l -= eta * lam * l
 		print("J = " + str(Cost(nn, x, t, lam)))
+	print("Elapsed time = " + str(time.time() - tics) + " seconds")
 
 # cost, sqerr
 def Cost(nn, x, t, lam):
@@ -113,3 +116,32 @@ def Cost(nn, x, t, lam):
 		aux = l.flatten()
 		reg += aux.dot(aux)
 	return sqerr
+
+# Learning, training online
+# nn neuralnet instance
+# x is features
+# t is targets
+# lam is Tikhonov regularisation
+# nepoch is num of iteration over the dataset
+# eta is lerning rate
+def NumGradDesc(nn, x, t, lam, nepoch, eta):
+	incr = 0.0001
+	tics = time.time()
+	for epoch in xrange(nepoch):
+		for xi,ti in zip(x,t):
+			for l in nn:
+				for w in l:
+					ref = w
+					w += incr
+					plus = Cost(nn, np.array([xi]), np.array([ti]), lam)
+					w -= 2.0*incr
+					minus = Cost(nn, np.array([xi]), np.array([ti]), lam)
+					w += incr
+					w -= eta*(plus - minus)/(2.0*incr)
+		# regularisation
+		for l in nn:
+			l -= eta * lam * l
+		print("J = " + str(Cost(nn, x, t, lam)))
+	print("Elapsed time = " + str(time.time() - tics) + " seconds")
+
+
