@@ -49,7 +49,7 @@ for train_index, test_index in sss:
 	nn = NeuralNetwork.Multilayer([4,4,3])
 	print("Training...")
 	NeuralNetwork.Backprop(nn, X_train, y_train, lam, 20, 0.1)
-	#NeuralNetwork.NumGradDesc(nn, X_train, y_train, lam, 200, 0.05)
+	#NeuralNetwork.NumGradDesc(nn, X_train, y_train, lam, 20, 0.1)
 	print("Testing...")
 	tcost = NeuralNetwork.Cost(nn, X_test, y_test, lam)
 	print("J = " + str(tcost))

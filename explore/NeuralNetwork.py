@@ -128,20 +128,18 @@ def NumGradDesc(nn, x, t, lam, nepoch, eta):
 	incr = 0.0001
 	tics = time.time()
 	for epoch in xrange(nepoch):
-		for xi,ti in zip(x,t):
-			for l in nn:
-				for w in l:
-					ref = w
-					w += incr
-					plus = Cost(nn, np.array([xi]), np.array([ti]), lam)
-					w -= 2.0*incr
-					minus = Cost(nn, np.array([xi]), np.array([ti]), lam)
-					w += incr
-					w -= eta*(plus - minus)/(2.0*incr)
+		for l in nn:
+			for w in l:
+				ref = w
+				w += incr
+				plus = Cost(nn, x, t, lam)
+				w -= 2.0*incr
+				minus = Cost(nn, x, t, lam)
+				w += incr
+				w -= eta*(plus - minus)/(2.0*incr)
 		# regularisation
 		for l in nn:
 			l -= eta * lam * l
 		print("J = " + str(Cost(nn, x, t, lam)))
 	print("Elapsed time = " + str(time.time() - tics) + " seconds")
-
 
