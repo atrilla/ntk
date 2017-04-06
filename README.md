@@ -1,83 +1,64 @@
-NTK - Neural Network Toolkit
-============================
+# NTK - Neural Network Toolkit
 
 The Neural Network Toolkit (NTK) project develops open-source software
-for neural computation.
+for neural computation. Experimental code developed in Python. Performance
+code developed in C.
 
-The NTK software toolkit is a framework that facilitates the creation 
-and evaluation of bespoke neural network models. It is designed to be 
-flexible and adaptable. Experimental work developed in Python. Low-level
-implementation in C.
+## Artificial Neural Networks
+
+Artificial Neural Networks are powerful models in Artificial Intelligence 
+and Machine Learning because they are suitable for many scenarios. Their 
+elementary working form is direct and simple. However, the devil is in the 
+details, and these models are particularly in need of much empirical 
+expertise to get tuned adequately so as to succeed in solving the problems 
+at hand. 
+
+The neural network is plausibly renown to be the universal learning system. 
+Without loss of generality, this project makes some decisions regarding 
+the model shape/topology, the training method, and the like. These design 
+choices, though, are easily tweaked so that the same implementation may be 
+suitable to solve all kinds of problems. This is accomplished by first 
+breaking down its complexity, and then by depicting a procedure to tackle 
+problems systematically in order to quickly detect model flaws and fix them 
+as soon as possible. Let’s say that the gist of this process is to achieve 
+a “lean adaptation” procedure for neural networks.
 
 
-Mission
--------
-To provide a highly performant open-source implementation of neural
-networks. Related references:
+## Theory of Operation
 
-* Wang, H. and Raj B., "On the Origin of Deep Learning", 
-arXiv:1702.07800v2, 2017.
-* Hertz, J., Krogh, A. and Palmer, R. G., "Introduction to the theory
-of neural computation", Addison-Wesley, 1991.
+Artificial Neural Networks (ANNs) are interesting models in Artificial 
+Intelligence and Machine Learning because they are powerful enough to succeed 
+at solving many different problems. Historical evidence of their importance 
+can be found as most leading technical books dedicate many pages to cover 
+them comprehensibly.
 
+Overall, ANNs are general-purpose universal learners driven by data. They 
+conform to the connectionist learning approach, which is based on an 
+interconnected network of simple units. 
+![Multilayer Perceptron, one of the most widely applied neural network models.](https://github.com/atrilla/ntk/blob/master/images/mlp_framework.png)
+Such simple units, aka neurons, 
+compute a nonlinear function over the weighted sum of their inputs. Neural 
+networks are expressive enough to fit to any dataset at hand, and yet they 
+are flexible enough to generalise their performance to new unseen data. It 
+is true, though, that neural networks are fraught with experimental details 
+and experience makes the difference between a successful model and a skewed 
+one.
 
-Features
---------
-All algorithms described in the aforementioned references (planned).
+## Notebooks
 
+* [Multilayer Perceptron](https://github.com/atrilla/ntk/blob/master/explore/Multilayer.ipynb)
 
-Developer guidelines
---------------------
-### Install ###
-Requirements for Python:
+## Requirements
+
+Python:
 
 * Python 2.7.6
 * Numpy 1.8.2
 * Scikit-learn 2.7.6
 
 
-Requirements for C:
+C:
 
 * gcc 4.8.4
 * GNU Make 3.81
-* Doxygen 1.8.6
-
-
-Development status
-------------------
-* NTK v1.0, under development.
-
-
-Glossary
---------
-* **McCulloch-Pitts unit** Synchronous discrete-time binary threshold
-unit (step function, or Heaviside function).
-
-* **Real neuron** The unit fires a pulse or action potential of fixed
-strength and duration if the weighted sum of the inputs reaches or
-exceeds a threshold. After firing, the unit has to wait for the
-refractory period before it can fire again. This can also be
-interpreted as a continuous graded response with hysteresis. It thus
-produces a sequence of pulses (magnitude and phase). It has some
-response delay (asynchronous update).
-
-* **Unit** General computation element. Its state or activation is
-given by a nonlinear function (activation func, gain func, transfer
-func or squashing func). Updated asynchronously.
-
-* **Updating** Computing unit response. It can be synchronous (all
-units have the same delay) or asynchronous (random order at random
-times).
-
-* **Weight** Represents the strength of the connection between two
-units. It can the positive or negative.
-
-
-Contact
--------
-FAQ, website and mailing list may be created if many users/developers
-join the project.
-
-In the meantime, for any comment or suggestion of any kind, please
-contact Alexandre Trilla <alex@atrilla.net>.
 
