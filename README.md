@@ -36,7 +36,7 @@ Overall, ANNs are general-purpose universal learners driven by data. They
 conform to the connectionist learning approach, which is based on an 
 interconnected network of simple units. 
 
-![Multilayer Perceptron, one of the most widely applied neural network models.](https://github.com/atrilla/ntk/blob/master/images/mlp_framework.png)
+![Multilayer Perceptron, one of the most widely applied neural network models.](https://github.com/atrilla/ntk/blob/master/explore/multilayer.png)
 
 Such simple units, aka neurons, 
 compute a nonlinear function over the weighted sum of their inputs. Neural 
