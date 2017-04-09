@@ -1,3 +1,8 @@
+09-Apr-2017  Alexandre Trilla  <alex@atrilla.net>
+
+  * explore/NeuralNetwork.py (InitWeightSmall): replaces InitWeight.
+
+
 03-Apr-2017  Alexandre Trilla  <alex@atrilla.net>
 
   * explore/NeuralNetwork.py (Backprop): elapsed time, matrix reference

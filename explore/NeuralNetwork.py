@@ -31,11 +31,15 @@ import time
 def Multilayer(inilay):
 	layer = []
 	for i,o in zip(inilay, inilay[1:]):
-		layer.append(InitWeight(i+1, o))
+		layer.append(InitWeightSmall(i+1, o))
 	return layer
 
 # L is the neuron size of the layers
-def InitWeight(Lin, Lout):
+def InitWeightSmall(Lin, Lout):
+	return np.random.uniform(-1.0, 1.0, [Lout, Lin])
+
+# TODO
+def ReinitWeightNg():
 	epsilon = np.sqrt(6) / np.sqrt(Lin + Lout);
 	return np.random.uniform(-epsilon, epsilon, [Lout, Lin])
 
