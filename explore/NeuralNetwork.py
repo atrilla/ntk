@@ -31,15 +31,11 @@ import time
 def Multilayer(inilay):
 	layer = []
 	for i,o in zip(inilay, inilay[1:]):
-		layer.append(InitWeightSmall(i+1, o))
+		layer.append(InitWeight(i+1, o))
 	return layer
 
 # L is the neuron size of the layers
-def InitWeightSmall(Lin, Lout):
-	return np.random.uniform(-1.0, 1.0, [Lout, Lin])
-
-# TODO
-def ReinitWeightNg():
+def InitWeight(Lin, Lout):
 	epsilon = np.sqrt(6) / np.sqrt(Lin + Lout);
 	return np.random.uniform(-epsilon, epsilon, [Lout, Lin])
 
@@ -102,8 +98,11 @@ def Backprop(nn, x, t, lam, nepoch, eta):
 					delta[i] *= eta * xx * err[lind][i] * o[lind+1][i] * (1 - o[lind+1][i])
 				l += delta
 		# regularisation
+		M = x.shape[0]
 		for l in nn:
-			l -= eta * lam * l
+			aux = l[:,0]
+			l -= eta * lam / M * l
+			l[:,0] = aux
 		print("J = " + str(Cost(nn, x, t, lam)))
 	print("Elapsed time = " + str(time.time() - tics) + " seconds")
 
@@ -116,9 +115,10 @@ def Cost(nn, x, t, lam):
 		sqerr += np.sum(err[-1]**2)
 	sqerr = sqerr / t.shape[0]
 	reg = 0
+	M = x.shape[0]
 	for l in nn:
 		aux = l.flatten()
-		reg += aux.dot(aux)
+		reg += (1.0/(2.0 * M)) * aux.dot(aux)
 	return sqerr
 
 # Learning, training online
@@ -142,8 +142,11 @@ def NumGradDesc(nn, x, t, lam, nepoch, eta):
 				w += incr
 				w -= eta*(plus - minus)/(2.0*incr)
 		# regularisation
+		M = x.shape[0]
 		for l in nn:
-			l -= eta * lam * l
+			aux = l[:,0]
+			l -= eta * lam / M * l
+			l[:,0] = aux
 		print("J = " + str(Cost(nn, x, t, lam)))
 	print("Elapsed time = " + str(time.time() - tics) + " seconds")
 

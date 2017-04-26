@@ -40,7 +40,7 @@ for i in iris.target:
 y = np.array(t)
 X = iris.data
 
-lam = 0.1
+lam = 0.2
 
 sss = StratifiedShuffleSplit(y, 1, test_size=0.3, random_state=0)
 for train_index, test_index in sss:

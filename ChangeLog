@@ -1,6 +1,7 @@
-09-Apr-2017  Alexandre Trilla  <alex@atrilla.net>
+26-Apr-2017  Alexandre Trilla  <alex@atrilla.net>
 
-  * explore/NeuralNetwork.py (InitWeightSmall): replaces InitWeight.
+  * explore/NeuralNetwork.py (Backprop, Cost, NumGradDesc): Tikhonov
+    calculation bug, bias weights not updated.
 
 
 03-Apr-2017  Alexandre Trilla  <alex@atrilla.net>
