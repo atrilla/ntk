@@ -118,7 +118,7 @@ def Cost(nn, x, t, lam):
 	M = x.shape[0]
 	for l in nn:
 		aux = l.flatten()
-		reg += (1.0/(2.0 * M)) * aux.dot(aux)
+		reg += (lam/(2.0 * M)) * aux.dot(aux)
 	return sqerr
 
 # Learning, training online
