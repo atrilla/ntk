@@ -103,7 +103,7 @@ def Backprop(nn, x, t, lam, nepoch, eta):
 			aux = l[:,0]
 			l -= eta * lam / M * l
 			l[:,0] = aux
-		print("J = " + str(Cost(nn, x, t, lam)))
+		print("J(" + str(epoch) + ") = " + str(Cost(nn, x, t, lam)))
 	print("Elapsed time = " + str(time.time() - tics) + " seconds")
 
 # cost, sqerr
@@ -147,6 +147,6 @@ def NumGradDesc(nn, x, t, lam, nepoch, eta):
 			aux = l[:,0]
 			l -= eta * lam / M * l
 			l[:,0] = aux
-		print("J = " + str(Cost(nn, x, t, lam)))
+		print("J(" + str(epoch) + ") = " + str(Cost(nn, x, t, lam)))
 	print("Elapsed time = " + str(time.time() - tics) + " seconds")
 
