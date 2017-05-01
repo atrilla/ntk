@@ -121,7 +121,7 @@ def Cost(nn, x, t, lam):
 		reg += (lam/(2.0 * M)) * aux.dot(aux)
 	return sqerr
 
-# Learning, training online
+# Learning, training batch
 # nn neuralnet instance
 # x is features
 # t is targets
