@@ -39,27 +39,32 @@ def InitWeight(Lin, Lout):
 	epsilon = np.sqrt(6) / np.sqrt(Lin + Lout);
 	return np.random.uniform(-epsilon, epsilon, [Lout, Lin])
 
+# Logistic activation function
+def Sigmoid(x):
+	return 1.0 / (1.0 + np.exp(-x))
+
+# Recommended tanh activation function
+def HyperTan(x):
+	return 1.7159 * np.tanh(2.0/3.0 * x)
+
 # Feed forward
 # x is ndarray
 # nn is neural net instance
+# af is activation function
 # return list of all neuron output values maintaining layer order
-def Predict(nn, x):
+def Predict(nn, x, af=Sigmoid):
 	neuron = [x]
 	ain = x.tolist()
 	ain.insert(0, 1)
 	a = np.array(ain)
 	for l in nn:
 		z = l.dot(a)
-		g = Sigmoid(z)
+		g = af(z)
 		neuron.append(g)
 		ahid = g.tolist()
 		ahid.insert(0,1)
 		a = np.array(ahid)
 	return neuron
-
-# activation function
-def Sigmoid(x):
-	return 1.0 / (1.0 + np.exp(-x))
 
 # errors
 # nn neural net instance
@@ -81,12 +86,13 @@ def Error(nn, o, t):
 # lam is Tikhonov regularisation
 # nepoch is num of iteration over the dataset
 # eta is lerning rate
-def Backprop(nn, x, t, lam, nepoch, eta):
+# af is activation function
+def Backprop(nn, x, t, lam, nepoch, eta, af=Sigmoid):
 	tics = time.time()
 	for epoch in xrange(nepoch):
 		# example fitting
 		for xi,ti in zip(x,t):
-			o = Predict(nn, xi)
+			o = Predict(nn, xi, af)
 			err = Error(nn, o[-1], ti)
 			for lind in xrange(len(nn)):
 				l = nn[lind]
@@ -107,10 +113,11 @@ def Backprop(nn, x, t, lam, nepoch, eta):
 	print("Elapsed time = " + str(time.time() - tics) + " seconds")
 
 # cost, sqerr
-def Cost(nn, x, t, lam):
+# af is activation function
+def Cost(nn, x, t, lam, af=Sigmoid):
 	sqerr = 0
 	for xi,ti in zip(x,t):
-		o = Predict(nn, xi)
+		o = Predict(nn, xi, af)
 		err = Error(nn, o[-1], ti)
 		sqerr += np.sum(err[-1]**2)
 	sqerr = sqerr / t.shape[0]
