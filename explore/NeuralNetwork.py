@@ -66,7 +66,7 @@ def Predict(nn, x, af=Sigmoid):
 		a = np.array(ahid)
 	return neuron
 
-# errors
+# errors, check o and t dimensions
 # nn neural net instance
 # o network output prediction
 # t targets
