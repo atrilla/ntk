@@ -88,6 +88,8 @@ def Error(nn, o, t):
 # eta is lerning rate
 # af is activation function
 def Backprop(nn, x, t, lam, nepoch, eta, af=Sigmoid):
+	A = 1.7159
+	B = 2.0 / 3.0
 	tics = time.time()
 	for epoch in xrange(nepoch):
 		# example fitting
@@ -101,7 +103,10 @@ def Backprop(nn, x, t, lam, nepoch, eta, af=Sigmoid):
 				xx.insert(0, 1)
 				xx = np.array(xx)
 				for i in xrange(delta.shape[0]):
-					delta[i] *= eta * xx * err[lind][i] * o[lind+1][i] * (1 - o[lind+1][i])
+					if af == Sigmoid:
+						delta[i] *= eta * xx * err[lind][i] * o[lind+1][i] * (1 - o[lind+1][i])
+					elif af == HyperTan:
+						delta[i] *= eta * err[lind][i] * ( 1.0/A * (A**2 - (o[lind+1][i])**2) * B * xx)
 				l += delta
 		# regularisation
 		M = x.shape[0]
@@ -135,7 +140,8 @@ def Cost(nn, x, t, lam, af=Sigmoid):
 # lam is Tikhonov regularisation
 # nepoch is num of iteration over the dataset
 # eta is lerning rate
-def NumGradDesc(nn, x, t, lam, nepoch, eta):
+# af is activation function
+def NumGradDesc(nn, x, t, lam, nepoch, eta, af=Sigmoid):
 	incr = 0.0001
 	tics = time.time()
 	for epoch in xrange(nepoch):
@@ -143,9 +149,9 @@ def NumGradDesc(nn, x, t, lam, nepoch, eta):
 			for w in l:
 				ref = w
 				w += incr
-				plus = Cost(nn, x, t, lam)
+				plus = Cost(nn, x, t, lam, af)
 				w -= 2.0*incr
-				minus = Cost(nn, x, t, lam)
+				minus = Cost(nn, x, t, lam, af)
 				w += incr
 				w -= eta*(plus - minus)/(2.0*incr)
 		# regularisation
@@ -154,6 +160,6 @@ def NumGradDesc(nn, x, t, lam, nepoch, eta):
 			aux = l[:,0]
 			l -= eta * lam / M * l
 			l[:,0] = aux
-		print("J(" + str(epoch) + ") = " + str(Cost(nn, x, t, lam)))
+		print("J(" + str(epoch) + ") = " + str(Cost(nn, x, t, lam, af)))
 	print("Elapsed time = " + str(time.time() - tics) + " seconds")
 

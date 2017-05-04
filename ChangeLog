@@ -1,13 +1,16 @@
 04-May-2017  Alexandre Trilla  <alex@atrilla.net>
 
-  * explore/Multilayer.ipynb: network layer bug, single/mult K.
+  * explore/Multilayer.ipynb: network layer bug, single/mult K. Recommended
+    activation function.
+
+  * explore/NeuralNetwork.py (Backprop, NumGradDesc): updated with activ fun.
 
 
 03-May-2017  Alexandre Trilla  <alex@atrilla.net>
 
-  * explore/Network.py (HyperTan): created.
+  * explore/NeuralNetwork.py (HyperTan): created.
 
-  * explore/Network.py (Predict, Backprop, Cost): activ func flexibility.
+  * explore/NeuralNetwork.py (Predict, Backprop, Cost): activ func flexibility.
 
   * explore/Multilayer.ipynb: target values, target vectors.
 
