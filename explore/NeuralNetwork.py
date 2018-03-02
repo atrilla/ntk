@@ -21,7 +21,8 @@
 #
 # -----------------------------------------------------------------------
 
-# Multilayer Perceptron, sigmoid activation
+# Multilayer Perceptron
+# Bias is automatically managed
 
 import numpy as np
 import time
@@ -35,6 +36,7 @@ def Multilayer(inilay):
 	return layer
 
 # L is the neuron size of the layers
+# return transition matrix
 def InitWeight(Lin, Lout):
 	epsilon = np.sqrt(6) / np.sqrt(Lin + Lout);
 	return np.random.uniform(-epsilon, epsilon, [Lout, Lin])
@@ -48,10 +50,10 @@ def HyperTan(x):
 	return 1.7159 * np.tanh(2.0/3.0 * x)
 
 # Feed forward
-# x is ndarray
+# x is ndarray, F features (input layer size)
 # nn is neural net instance
 # af is activation function
-# return list of all neuron output values maintaining layer order
+# return list of all neuron output values (ndarray) maintaining layer order
 def Predict(nn, x, af=Sigmoid):
 	neuron = [x]
 	ain = x.tolist()
@@ -66,13 +68,13 @@ def Predict(nn, x, af=Sigmoid):
 		a = np.array(ahid)
 	return neuron
 
-# errors, check o and t dimensions
+# Network errors
 # nn neural net instance
-# o network output prediction
-# t targets
+# o network output prediction, ndarray with O outputs
+# t target, ndarray with O outputs
+# return list of all neuron error values (ndarray) maintaining layer order
 def Error(nn, o, t):
-	err = []
-	err.append(t - o)
+	err = [t - o]
 	for l in reversed(nn[1:]):
 		aux = err[-1].dot(l)
 		err.append(aux[1:])
@@ -81,12 +83,13 @@ def Error(nn, o, t):
 
 # Learning, training online
 # nn neuralnet instance
-# x is features
-# t is targets
-# lam is Tikhonov regularisation
-# nepoch is num of iteration over the dataset
-# eta is lerning rate
+# x is examples, ndarray (N,F), N instances, F features
+# t is targets, ndarray (N,O), N instances, O outputs
+# lam is Tikhonov regularisation, float
+# nepoch is num of iteration over the dataset, int
+# eta is lerning rate, float
 # af is activation function
+# network weights are adjusted
 def Backprop(nn, x, t, lam, nepoch, eta, af=Sigmoid):
 	A = 1.7159
 	B = 2.0 / 3.0
@@ -118,6 +121,9 @@ def Backprop(nn, x, t, lam, nepoch, eta, af=Sigmoid):
 	print("Elapsed time = " + str(time.time() - tics) + " seconds")
 
 # cost, sqerr
+# x is examples, ndarray (N,F), N instances, F features
+# t is targets, ndarray (N,O), N instances, O outputs
+# lam is Tikhonov regularisation, float
 # af is activation function
 def Cost(nn, x, t, lam, af=Sigmoid):
 	sqerr = 0
@@ -135,12 +141,13 @@ def Cost(nn, x, t, lam, af=Sigmoid):
 
 # Learning, training batch
 # nn neuralnet instance
-# x is features
-# t is targets
-# lam is Tikhonov regularisation
-# nepoch is num of iteration over the dataset
-# eta is lerning rate
+# x is examples, ndarray (N,F), N instances, F features
+# t is targets, ndarray (N,O), N instances, O outputs
+# lam is Tikhonov regularisation, float
+# nepoch is num of iteration over the dataset, int
+# eta is lerning rate, float
 # af is activation function
+# network weights are adjusted
 def NumGradDesc(nn, x, t, lam, nepoch, eta, af=Sigmoid):
 	incr = 0.0001
 	tics = time.time()

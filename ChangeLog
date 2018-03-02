@@ -1,3 +1,8 @@
+02-Mar-2018  Alexandre Trilla  <alex@atrilla.net>
+
+  * explore/NeuralNetwork.py (Error): target list of array, contracts.
+
+
 04-May-2017  Alexandre Trilla  <alex@atrilla.net>
 
   * explore/Multilayer.ipynb: network layer bug, single/mult K. Recommended
