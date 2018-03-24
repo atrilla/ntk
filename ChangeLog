@@ -1,3 +1,8 @@
+24-Mar-2018  Alexandre Trilla  <alex@atrilla.net>
+
+  * explore/Multilayer.ipynb: activation func details. XV link to iris test.
+
+
 02-Mar-2018  Alexandre Trilla  <alex@atrilla.net>
 
   * explore/NeuralNetwork.py (Error): target list of array, contracts.
