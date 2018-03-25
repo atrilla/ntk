@@ -1,0 +1,201 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Stylish Article
+% LaTeX Template
+% Version 1.0 (31/1/13)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Mathias Legrand (legrand.mathias@gmail.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[fleqn,10pt]{SelfArx} % Document font size and equations flushed left
+
+\setlength{\columnsep}{0.55cm} % Distance between the two columns of text
+\setlength{\fboxrule}{0.75pt} % Width of the border around the abstract
+
+\definecolor{color1}{RGB}{0,0,90} % Color of the article title and sections
+\definecolor{color2}{RGB}{0,20,20} % Color of the boxes behind the abstract and headings
+
+\newlength{\tocsep} 
+\setlength\tocsep{1.5pc} % Sets the indentation of the sections in the table of contents
+\setcounter{tocdepth}{3} % Show only three levels in the table of contents section: sections, subsections and subsubsections
+
+\usepackage{lipsum} % Required to insert dummy text
+
+\usepackage{tikz}
+\usetikzlibrary{automata,positioning,fit}
+
+%----------------------------------------------------------------------------------------
+%	ARTICLE INFORMATION
+%----------------------------------------------------------------------------------------
+
+\JournalInfo{Working Paper} % Journal information
+\Archive{} % Additional notes (e.g. copyright, DOI, review/research article)
+
+\PaperTitle{Tikz snippet for drawing ANN diagrams} % Article title
+
+\Authors{Alexandre Trilla\textsuperscript{1}*} % Authors
+\affiliation{\textsuperscript{1}\textit{Research Engineer, http://atrilla.net}} % Author affiliation
+\affiliation{*\textbf{Corresponding author}: alex@atrilla.net} % Corresponding author
+
+\Keywords{Artificial Neural Network} % Keywords - if you don't want any simply remove all the text between the curly brackets
+\newcommand{\keywordname}{Keywords} % Defines the keywords heading name
+
+\Abstract{ANN diagrams.}
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\flushbottom % Makes all text pages the same height
+
+\maketitle % Print the title and abstract box
+
+%\tableofcontents % Print the contents section
+
+\thispagestyle{empty} % Removes page numbering from the first page
+
+%----------------------------------------------------------------------------------------
+%	ARTICLE CONTENTS
+%----------------------------------------------------------------------------------------
+
+\begin{figure*}[!h]\centering % Using \begin{figure*} makes the figure take up the entire width of the page
+\begin{tikzpicture}[shorten >=1pt,on grid,auto,node distance=2cm] 
+   \node[state] (x1)  [draw=none]  {$x_1$}; 
+   \node[state] (x2)   [draw=none,below=of x1] {$x_2$}; 
+   \node[state] (xN)   [draw=none,below=of x2] {$x_N$}; 
+   \node[state] (i1)   [right=of x1] {$i_1$}; 
+   \node[state] (ione)   [above=of i1] {+1}; 
+   \node[state] (i2)   [below=of i1] {$i_2$}; 
+   \node[state] (iN)   [below=of i2] {$i_N$}; 
+   \node[state] (hone)   [right=of ione] {+1}; 
+   \node[state] (h1)   [below=of hone] {$h_1$}; 
+   \node[state] (h2)   [below=of h1] {$h_2$}; 
+   \node[state] (hH)   [below=of h2] {$h_H$}; 
+   \node[state] (o1)   [right=of h1] {$o_1$}; 
+   \node[state] (o2)   [below=of o1] {$o_2$}; 
+   \node[state] (oK)   [below=of o2] {$o_K$}; 
+   \node[state] (y1)   [draw=none,right=of o1] {$y_1$}; 
+   \node[state] (y2)   [draw=none,below=of y1] {$y_2$}; 
+   \node[state] (yK)   [draw=none,below=of y2] {$y_K$}; 
+   \path[->] 
+        (x1) edge node {} (i1)
+        (x2) edge node {} (i2)
+        (xN) edge node {} (iN)
+        (ione) edge node {} (h1)
+        (ione) edge node {} (h2)
+        (ione) edge node {} (hH)
+        (i1) edge node {} (h1)
+        (i1) edge node {} (h2)
+        (i1) edge node {} (hH)
+        (i2) edge node {} (h1)
+        (i2) edge node {} (h2)
+        (i2) edge node {} (hH)
+        (iN) edge node {} (h1)
+        (iN) edge node {} (h2)
+        (iN) edge node [below] {$\begin{array}{c}\\\theta^{(IN)}\end{array}$} (hH)
+        (hone) edge node {} (o1)
+        (hone) edge node {} (o2)
+        (hone) edge node {} (oK)
+        (h1) edge node {} (o1)
+        (h1) edge node {} (o2)
+        (h1) edge node {} (oK)
+        (h2) edge node {} (o1)
+        (h2) edge node {} (o2)
+        (h2) edge node {} (oK)
+        (hH) edge node {} (o1)
+        (hH) edge node {} (o2)
+        (hH) edge node [below] {$\begin{array}{c}\\\theta^{(OUT)}\end{array}$} (oK)
+        (o1) edge node {} (y1)
+        (o2) edge node {} (y2)
+        (oK) edge node {} (yK)
+        ;
+\end{tikzpicture}
+\caption{Multilayer Perceptron}
+\end{figure*}
+
+
+
+\begin{figure*}[!h]\centering % Using \begin{figure*} makes the figure take up the entire width of the page
+\begin{tikzpicture}[shorten >=1pt,on grid,auto,node distance=2cm] 
+   \node[state] (x0)  [draw=none]  {$x[n]$}; 
+   \node[state] (x1)   [draw=none,below=of x0] {$x[n-1]$}; 
+   \node[state] (xN)   [draw=none,below=of x1] {$x[n-N]$}; 
+   \node[fill=black!20,rounded corners, inner sep=5pt, draw] (g0)   [right=of x0] {$g(0)$}; 
+   \node[fill=black!20,rounded corners, inner sep=5pt, draw] (g1)   [right=of x1] {$g(1)$}; 
+   \node[fill=black!20,rounded corners, inner sep=5pt, draw] (gN)   [right=of xN] {$g(N)$}; 
+   \node[] ()   [below=of gN, yshift=1cm] {Sequence buffer}; 
+   \node[state] (i1)   [right=of g0] {$i_1$}; 
+   \node[state] (ione)   [above=of i1] {+1}; 
+   \node[state] (i2)   [below=of i1] {$i_2$}; 
+   \node[state] (iN)   [below=of i2] {$i_N$}; 
+   \node[state] (hone)   [right=of ione] {+1}; 
+   \node[state] (h1)   [below=of hone] {$h_1$}; 
+   \node[state] (h2)   [below=of h1] {$h_2$}; 
+   \node[state] (hH)   [below=of h2] {$h_H$}; 
+   \node[] ()   [below=of hH, yshift=1cm] {Multilayer Perceptron}; 
+   \node[state] (o1)   [right=of h1] {$o_1$}; 
+   \node[state] (o2)   [below=of o1] {$o_2$}; 
+   \node[state] (oK)   [below=of o2] {$o_K$}; 
+   \node[state] (y1)   [draw=none,right=of o1] {$y_1$}; 
+   \node[state] (y2)   [draw=none,below=of y1] {$y_2$}; 
+   \node[state] (yK)   [draw=none,below=of y2] {$y_K$}; 
+   \path[->] 
+        (x0) edge node {} (g0)
+        (x1) edge node {} (g0)
+        (xN) edge node {} (g0)
+        (x0) edge node {} (g1)
+        (x1) edge node {} (g1)
+        (xN) edge node {} (g1)
+        (x0) edge node {} (gN)
+        (x1) edge node {} (gN)
+        (xN) edge node {} (gN)
+        (g0) edge node {} (i1)
+        (g1) edge node {} (i2)
+        (gN) edge node {} (iN)
+        (ione) edge node {} (h1)
+        (ione) edge node {} (h2)
+        (ione) edge node {} (hH)
+        (i1) edge node {} (h1)
+        (i1) edge node {} (h2)
+        (i1) edge node {} (hH)
+        (i2) edge node {} (h1)
+        (i2) edge node {} (h2)
+        (i2) edge node {} (hH)
+        (iN) edge node {} (h1)
+        (iN) edge node {} (h2)
+        (iN) edge node {} (hH)
+        (hone) edge node {} (o1)
+        (hone) edge node {} (o2)
+        (hone) edge node {} (oK)
+        (h1) edge node {} (o1)
+        (h1) edge node {} (o2)
+        (h1) edge node {} (oK)
+        (h2) edge node {} (o1)
+        (h2) edge node {} (o2)
+        (h2) edge node {} (oK)
+        (hH) edge node {} (o1)
+        (hH) edge node {} (o2)
+        (hH) edge node {} (oK)
+        (o1) edge node {} (y1)
+        (o2) edge node {} (y2)
+        (oK) edge node {} (yK)
+        ;
+\end{tikzpicture}
+\caption{Time-Delay Neural Network}
+\end{figure*}
+
+
+
+
+\end{document}
