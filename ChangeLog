@@ -1,3 +1,20 @@
+26-Mar-2018  Alexandre Trilla  <alex@atrilla.net>
+
+  * explore/NeuralNetwork.py (MLP): Function headers.
+  * explore/Multilayer.ipynb
+  * explore/test_iris.py
+
+  * explore/NeuralNetwork.py (TDNN, TDNN_Filter, TDNN_Predict, TDNN_Backprop,
+    TDNN_Cost): created.
+  * explore/Time-Delay.ipynb
+
+
+25-Mar-2018  Alexandre Trilla  <alex@atrilla.net>
+
+  * explore/Time-Delay.ipynb: created.
+  * explore/anndraw: created.
+
+
 24-Mar-2018  Alexandre Trilla  <alex@atrilla.net>
 
   * explore/Multilayer.ipynb: activation func details. XV link to iris test.
