@@ -24,7 +24,6 @@
 import NeuralNetwork
 from sklearn import datasets as dset
 from sklearn.cross_validation import StratifiedShuffleSplit
-from sklearn.metrics import accuracy_score
 import numpy as np
 
 iris = dset.load_iris()

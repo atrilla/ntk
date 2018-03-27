@@ -1,3 +1,8 @@
+27-Mar-2018  Alexandre Trilla  <alex@atrilla.net>
+
+  * explore/Time-Delay.ipynb: experiments with time-dependent signal.
+
+
 26-Mar-2018  Alexandre Trilla  <alex@atrilla.net>
 
   * explore/NeuralNetwork.py (MLP): Function headers.
