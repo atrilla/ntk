@@ -197,17 +197,17 @@ def TDNN_Predict(tdnn, x, af=Sigmoid):
 	g = tdnn[0]
 	mlp = tdnn[1]
 	gx = g.dot(x)
-	return MLP_Predict(mlp, gx, af=Sigmoid)
+	return MLP_Predict(mlp, gx, af)
 
 def TDNN_Backprop(tdnn, x, t, lam, nepoch, eta, af=Sigmoid):
 	g = tdnn[0]
 	mlp = tdnn[1]
 	gx = x.dot(g.transpose())
-	MLP_Backprop(mlp, gx, t, lam, nepoch, eta, af=Sigmoid)
+	MLP_Backprop(mlp, gx, t, lam, nepoch, eta, af)
 
 def TDNN_Cost(tdnn, x, t, lam, af=Sigmoid):
 	g = tdnn[0]
 	mlp = tdnn[1]
 	gx = x.dot(g.transpose())
-	return MLP_Cost(tdnn, x, t, lam, af=Sigmoid)
+	return MLP_Cost(tdnn, x, t, lam, af)
 
