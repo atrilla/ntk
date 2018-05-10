@@ -1,3 +1,10 @@
+10-May-2018  Alexandre Trilla  <alex@atrilla.net>
+
+  * explore/NeuralNetwork.py (Error, Backprop, Cost): Cros-entropy cost.
+
+  * explore/NeuralNetwork.py (all): af default parameter made explicit.
+
+
 27-Mar-2018  Alexandre Trilla  <alex@atrilla.net>
 
   * explore/Time-Delay.ipynb: experiments with time-dependent signal.

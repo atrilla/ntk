@@ -71,9 +71,12 @@ def MLP_Predict(nn, x, af=Sigmoid):
 # nn neural net instance
 # o network output prediction, ndarray with O outputs
 # t target, ndarray with O outputs
+# c cost function, 'sqerr' (default), 'xent'
 # return list of all neuron error values (ndarray) maintaining layer order
-def MLP_Error(nn, o, t):
+def MLP_Error(nn, o, t, c='sqerr'):
 	err = [t - o]
+	if c=='xent':
+		err = [-((1.0-t)/(1.0-o) - t/o)]
 	for l in reversed(nn[1:]):
 		aux = err[-1].dot(l)
 		err.append(aux[1:])
@@ -88,16 +91,17 @@ def MLP_Error(nn, o, t):
 # nepoch is num of iteration over the dataset, int
 # eta is lerning rate, float
 # af is activation function
+# c cost function, 'sqerr', 'xent' (af must be sigmoid, default)
 # network weights are adjusted
-def MLP_Backprop(nn, x, t, lam, nepoch, eta, af=Sigmoid):
+def MLP_Backprop(nn, x, t, lam, nepoch, eta, af=Sigmoid, c='sqerr'):
 	A = 1.7159
 	B = 2.0 / 3.0
 	tics = time.time()
 	for epoch in xrange(nepoch):
 		# example fitting
 		for xi,ti in zip(x,t):
-			o = MLP_Predict(nn, xi, af)
-			err = MLP_Error(nn, o[-1], ti)
+			o = MLP_Predict(nn, xi, af=af)
+			err = MLP_Error(nn, o[-1], ti, c=c)
 			for lind in xrange(len(nn)):
 				l = nn[lind]
 				delta = np.ones(l.shape)
@@ -116,7 +120,7 @@ def MLP_Backprop(nn, x, t, lam, nepoch, eta, af=Sigmoid):
 			aux = l[:,0]
 			l -= eta * lam / M * l
 			l[:,0] = aux
-		print("J(" + str(epoch) + ") = " + str(MLP_Cost(nn, x, t, lam)))
+		print("J(" + str(epoch) + ") = " + str(MLP_Cost(nn, x, t, lam, af=af, c=c)))
 	print("Elapsed time = " + str(time.time() - tics) + " seconds")
 
 # cost, sqerr
@@ -124,19 +128,28 @@ def MLP_Backprop(nn, x, t, lam, nepoch, eta, af=Sigmoid):
 # t is targets, ndarray (N,O), N instances, O outputs
 # lam is Tikhonov regularisation, float
 # af is activation function
-def MLP_Cost(nn, x, t, lam, af=Sigmoid):
-	sqerr = 0
-	for xi,ti in zip(x,t):
-		o = MLP_Predict(nn, xi, af)
-		err = MLP_Error(nn, o[-1], ti)
-		sqerr += np.sum(err[-1]**2)
-	sqerr = sqerr / t.shape[0]
+# c cost function, 'sqerr' (default), 'xent'
+def MLP_Cost(nn, x, t, lam, af=Sigmoid, c='sqerr'):
+	fit = 0
+	if c=='sqerr':
+		sqerr = 0
+		for xi,ti in zip(x,t):
+			o = MLP_Predict(nn, xi, af=af)
+			err = MLP_Error(nn, o[-1], ti, c=c)
+			sqerr += np.sum(err[-1]**2)
+		fit = sqerr / t.shape[0]
+	if c=='xent':
+		xent = 0
+		for xi,ti in zip(x,t):
+			o = MLP_Predict(nn, xi, af=af)
+			xent += np.sum(-(ti*np.log(o[-1]) + (1.0 - ti)*np.log(1.0 - o[-1])))
+		fit = xent
 	reg = 0
 	M = x.shape[0]
 	for l in nn:
 		aux = l.flatten()
 		reg += (lam/(2.0 * M)) * aux.dot(aux)
-	return sqerr
+	return fit + reg
 
 # Learning, training batch
 # nn neuralnet instance
@@ -155,9 +168,9 @@ def MLP_NumGradDesc(nn, x, t, lam, nepoch, eta, af=Sigmoid):
 			for w in l:
 				ref = w
 				w += incr
-				plus = MLP_Cost(nn, x, t, lam, af)
+				plus = MLP_Cost(nn, x, t, lam, af=af)
 				w -= 2.0*incr
-				minus = MLP_Cost(nn, x, t, lam, af)
+				minus = MLP_Cost(nn, x, t, lam, af=af)
 				w += incr
 				w -= eta*(plus - minus)/(2.0*incr)
 		# regularisation
@@ -166,7 +179,7 @@ def MLP_NumGradDesc(nn, x, t, lam, nepoch, eta, af=Sigmoid):
 			aux = l[:,0]
 			l -= eta * lam / M * l
 			l[:,0] = aux
-		print("J(" + str(epoch) + ") = " + str(MLP_Cost(nn, x, t, lam, af)))
+		print("J(" + str(epoch) + ") = " + str(MLP_Cost(nn, x, t, lam, af=af)))
 	print("Elapsed time = " + str(time.time() - tics) + " seconds")
 
 # Time-Delay Neural Network
@@ -197,17 +210,17 @@ def TDNN_Predict(tdnn, x, af=Sigmoid):
 	g = tdnn[0]
 	mlp = tdnn[1]
 	gx = g.dot(x)
-	return MLP_Predict(mlp, gx, af)
+	return MLP_Predict(mlp, gx, af=af)
 
 def TDNN_Backprop(tdnn, x, t, lam, nepoch, eta, af=Sigmoid):
 	g = tdnn[0]
 	mlp = tdnn[1]
 	gx = x.dot(g.transpose())
-	MLP_Backprop(mlp, gx, t, lam, nepoch, eta, af)
+	MLP_Backprop(mlp, gx, t, lam, nepoch, eta, af=af)
 
 def TDNN_Cost(tdnn, x, t, lam, af=Sigmoid):
 	g = tdnn[0]
 	mlp = tdnn[1]
 	gx = x.dot(g.transpose())
-	return MLP_Cost(tdnn, x, t, lam, af)
+	return MLP_Cost(tdnn, x, t, lam, af=af)
 
