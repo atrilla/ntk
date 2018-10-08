@@ -1,3 +1,10 @@
+08-Oct-2018  Alexandre Trilla  <alex@atrilla.net>
+
+  * explore/NeuralNetwork.py (ReLU): created. Deep Learning suitable 
+    activation function.
+  * explore/NeuralNetwork.py (Backprop)
+
+
 10-May-2018  Alexandre Trilla  <alex@atrilla.net>
 
   * explore/NeuralNetwork.py (Error, Backprop, Cost): Cros-entropy cost.

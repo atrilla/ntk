@@ -48,6 +48,24 @@ def Sigmoid(x):
 def HyperTan(x):
 	return 1.7159 * np.tanh(2.0/3.0 * x)
 
+# Rectifier, for deep learning
+def ReLU(x):
+	valtr = []
+	if isinstance(x, np.ndarray):
+		for i in x:
+			aux = 0.0
+			if i > 0.0:
+				valtr.append(i)
+			else:
+				valtr.append(0.0)
+		valtr = np.array(valtr)
+	else:
+		if x > 0.0:
+			valtr = x
+		else:
+			valtr = 0.0
+	return valtr
+
 # Feed forward
 # x is ndarray, F features (input layer size)
 # nn is neural net instance
@@ -113,6 +131,11 @@ def MLP_Backprop(nn, x, t, lam, nepoch, eta, af=Sigmoid, c='sqerr'):
 						delta[i] *= eta * xx * err[lind][i] * o[lind+1][i] * (1 - o[lind+1][i])
 					elif af == HyperTan:
 						delta[i] *= eta * err[lind][i] * ( 1.0/A * (A**2 - (o[lind+1][i])**2) * B * xx)
+					elif af == ReLU:
+						if o[lind+1][i] > 0.0:
+							delta[i] *= eta * xx * err[lind][i]
+						else:
+							delta[i] = 0.0
 				l += delta
 		# regularisation
 		M = x.shape[0]
