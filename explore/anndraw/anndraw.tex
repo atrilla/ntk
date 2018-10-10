@@ -196,6 +196,82 @@
 \end{figure*}
 
 
+\begin{figure*}[!h]\centering % Using \begin{figure*} makes the figure take up the entire width of the page
+\begin{tikzpicture}[shorten >=1pt,on grid,auto,node distance=2cm] 
+   \node[state] (x1)  [draw=none]  {$x_1$}; 
+   \node[state] (x2)   [draw=none,below=of x1] {$x_2$}; 
+   \node[state] (xN)   [draw=none,below=of x2] {$x_N$}; 
+   \node[state] (i1)   [right=of x1] {$i_1$}; 
+   \node[state] (ione)   [above=of i1] {+1}; 
+   \node[state] (i2)   [below=of i1] {$i_2$}; 
+   \node[state] (iN)   [below=of i2] {$i_N$}; 
+   \node[state] (hone1)   [right=of ione] {+1}; 
+   \node[state] (h11)   [below=of hone1] {$h_1^1$}; 
+   \node[state] (h21)   [below=of h11] {$h_2^1$}; 
+   \node[state] (hH1)   [below=of h21] {$h_H^1$}; 
+   \node[state] (honeL)   [right=of hone1] {+1}; 
+   \node[state] (h1L)   [below=of honeL] {$h_1^L$}; 
+   \node[state] (h2L)   [below=of h1L] {$h_2^L$}; 
+   \node[state] (hHL)   [below=of h2L] {$h_H^L$}; 
+   \node[state] (o1)   [right=of h1L] {$o_1$}; 
+   \node[state] (o2)   [below=of o1] {$o_2$}; 
+   \node[state] (oK)   [below=of o2] {$o_K$}; 
+   \node[state] (y1)   [draw=none,right=of o1] {$y_1$}; 
+   \node[state] (y2)   [draw=none,below=of y1] {$y_2$}; 
+   \node[state] (yK)   [draw=none,below=of y2] {$y_K$}; 
+   \path[->] 
+        (x1) edge node {} (i1)
+        (x2) edge node {} (i2)
+        (xN) edge node {} (iN)
+        (ione) edge node {} (h11)
+        (ione) edge node {} (h21)
+        (ione) edge node {} (hH1)
+        (i1) edge node {} (h11)
+        (i1) edge node {} (h21)
+        (i1) edge node {} (hH1)
+        (i2) edge node {} (h11)
+        (i2) edge node {} (h21)
+        (i2) edge node {} (hH1)
+        (iN) edge node {} (h11)
+        (iN) edge node {} (h21)
+        (iN) edge node {} (hH1)
+
+        (hone1) edge node {} (h1L)
+        (hone1) edge node {} (h2L)
+        (hone1) edge node {} (hHL)
+        (h11) edge node {} (h1L)
+        (h11) edge node {} (h2L)
+        (h11) edge node {} (hHL)
+        (h21) edge node {} (h1L)
+        (h21) edge node {} (h2L)
+        (h21) edge node {} (hHL)
+        (hH1) edge node {} (h1L)
+        (hH1) edge node {} (h2L)
+        (hH1) edge node {} (hHL)
+ 
+        (honeL) edge node {} (o1)
+        (honeL) edge node {} (o2)
+        (honeL) edge node {} (oK)
+        (h1L) edge node {} (o1)
+        (h1L) edge node {} (o2)
+        (h1L) edge node {} (oK)
+        (h2L) edge node {} (o1)
+        (h2L) edge node {} (o2)
+        (h2L) edge node {} (oK)
+        (hHL) edge node {} (o1)
+        (hHL) edge node {} (o2)
+        (hHL) edge node {} (oK)
+        (o1) edge node {} (y1)
+        (o2) edge node {} (y2)
+        (oK) edge node {} (yK)
+        ;
+\end{tikzpicture}
+\caption{Deep Learning network}
+\end{figure*}
+
+
+
+
 
 
 \end{document}
