@@ -49,8 +49,9 @@ one.
 ## Notebooks
 
 * [Multilayer Perceptron](https://github.com/atrilla/ntk/blob/master/explore/Multilayer.ipynb)
-* [Time-Delay Neural Network](https://github.com/atrilla/ntk/blob/master/explore/Time-Delay.ipynb)
+* [Time-Delay Neural Network](https://github.com/atrilla/ntk/blob/master/explore/Time-Delay.ipynb) - 1D Convolutional Neural Network
 * [Deep Neural Network](https://github.com/atrilla/ntk/blob/master/explore/Deep.ipynb)
+* Self-Organising Map
 
 ## Requirements
 

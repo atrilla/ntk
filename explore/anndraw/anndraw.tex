@@ -270,8 +270,66 @@
 \end{figure*}
 
 
+\begin{figure*}[!h]\centering % Using \begin{figure*} makes the figure take up the entire width of the page
+\begin{tikzpicture}[shorten >=1pt,on grid,auto,node distance=1.0cm]
+   \node[state] (x1)  [draw=none]  {$x_1$}; 
+   \node[state] (x2)   [draw=none,below=of x1] {$x_2$}; 
+   \node[state] (x3)   [draw=none,below=of x2] {$x_3$}; 
+   \node[state] (xdots)   [draw=none,below=of x3] {$\vdots$}; 
+   \node[state] (xD)   [draw=none,below=of xdots] {$x_D$}; 
+   \node[state, node distance=1.5cm] (i1)   [right=of x1] {$i_1$}; 
+   \node[state] (i2)   [below=of i1] {$i_2$}; 
+   \node[state] (i3)   [below=of i2] {$i_3$}; 
+   \node[state] (idots)   [draw=none,below=of i3] {$\vdots$}; 
+   \node[state] (iD)   [below=of idots] {$i_D$}; 
+   \node[state, node distance=2cm] (h1)   [right=of i2] {$h_1$}; 
+   \node[state] (hdots)   [draw=none,below=of h1] {$\vdots$}; 
+   \node[state] (hH)   [below=of hdots] {$h_{H}$}; 
+   \node[state, node distance=2cm] (o2)   [right=of h1] {$o_2$}; 
+   \node[state] (o1)   [above=of o2] {$o_1$}; 
+   \node[state] (o3)   [below=of o2] {$o_3$}; 
+   \node[state] (odots)   [draw=none,below=of o3] {$\vdots$}; 
+   \node[state] (oD)   [below=of odots] {$o_D$}; 
+   \node[state, node distance=1.5cm] (xx1) [draw=none,right=of o1] {$\hat{x}_1$};
+   \node[state] (xx2)   [draw=none,below=of xx1] {$\hat{x}_2$}; 
+   \node[state] (xx3)   [draw=none,below=of xx2] {$\hat{x}_3$}; 
+   \node[state] (xxdots)   [draw=none,below=of xx3] {$\vdots$}; 
+   \node[state] (xxD)   [draw=none,below=of xxdots] {$\hat{x}_D$}; 
+   \path[->] 
+        (x1) edge node {} (i1)
+        (x2) edge node {} (i2)
+        (x3) edge node {} (i3)
+        (xD) edge node {} (iD)
+        (i1) edge node {} (h1)
+        (i1) edge node {} (hH)
+        (i2) edge node {} (h1)
+        (i2) edge node {} (hH)
+        (i3) edge node {} (h1)
+        (i3) edge node {} (hH)
+        (iD) edge node {} (h1)
+        (iD) edge node {} (hH)
+        (h1) edge node {} (o1)
+        (h1) edge node {} (o2)
+        (h1) edge node {} (o3)
+        (h1) edge node {} (oD)
+        (hH) edge node {} (o1)
+        (hH) edge node {} (o2)
+        (hH) edge node {} (o3)
+        (hH) edge node {} (oD)
+        (o1) edge node {} (xx1)
+        (o2) edge node {} (xx2)
+        (o3) edge node {} (xx3)
+        (oD) edge node {} (xxD)
+        ;
 
+%\begin{pgfonlayer}{background}
+%    \filldraw [line width=6mm,join=round,black!10]
+%      (ione.north -| ione.west) rectangle (i4.south -| o1.east);
+%\end{pgfonlayer}
 
+\end{tikzpicture}
+\caption{Auto-encoder}
+\end{figure}
 
 
 \end{document}

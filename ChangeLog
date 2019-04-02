@@ -1,3 +1,11 @@
+02-Apr-2019  Alexandre Trilla  <alex@atrilla.net>
+
+  * explore/NeuralNetwork.py (SOM): created.
+  * explore/test_som.py
+
+  * explore/test_autoenc.py: created.
+
+
 11-Oct-2018  Alexandre Trilla  <alex@atrilla.net>
 
   * explore/Deep.ipynb: created.
