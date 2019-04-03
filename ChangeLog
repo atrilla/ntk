@@ -2,6 +2,8 @@
 
   * explore/NeuralNetwork.py (ELM, ELM_Predict): created.
 
+  * explore/test_rl.py: Open-AI Gym skeleton.
+
 
 02-Apr-2019  Alexandre Trilla  <alex@atrilla.net>
 
