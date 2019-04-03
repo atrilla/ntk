@@ -264,7 +264,7 @@ def SOM_Topology(N):
     return ind
 
 # Kohonen training
-# nn som instance
+# nn SOM instance
 # x is examples, ndarray (N,F), N instances, F features
 # epoch, int, number of rounds
 # eta is lerning rate, float
@@ -321,4 +321,19 @@ def SOM_Coord(N, bmu):
     x = bmu%N
     y = (bmu + N)/N
     return [x,y]
+
+# Elman network
+# inilay, list with layer units, eg, [I,H,O]
+# return Elman neural net instance
+def ELM(inilay):
+    return MLP([inilay[0] + inilay[1], inilay[1], inilay[2]])
+
+# nn is Elman neural net instance
+# x is ndarray, I features (input layer size), seq item at a given time
+# c is ndarray, context
+# af is activation function
+# return list of all neuron output values (ndarray) maintaining layer order
+def ELM_Predict(nn, x, c, af=Sigmoid):
+    aux = np.append(c,x)
+    return MLP_Predict(nn, aux, af=af)
 
