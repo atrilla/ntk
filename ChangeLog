@@ -1,3 +1,8 @@
+04-Apr-2019  Alexandre Trilla  <alex@atrilla.net>
+
+  * explore/NeuralNetwork.py (PR_Predict, ELM_Context): generic funcs.
+
+
 03-Apr-2019  Alexandre Trilla  <alex@atrilla.net>
 
   * explore/NeuralNetwork.py (ELM, ELM_Predict): created.
