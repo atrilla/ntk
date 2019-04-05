@@ -336,6 +336,12 @@ def SOM_Coord(N, bmu):
 def ELM(inilay):
     return MLP([inilay[0] + inilay[1], inilay[1], inilay[2]])
 
+# Jordan network
+# inilay, list with layer units, eg, [I,H,O]
+# return Jordan neural net instance
+def JOR(inilay):
+    return MLP([inilay[0] + inilay[2], inilay[1], inilay[2]])
+
 # nn is a partially recurrent neural net instance
 # x is ndarray, I features (input layer size), seq item at a given time
 # c is ndarray, context
@@ -350,9 +356,14 @@ def PR_Predict(nn, x, c, af=Sigmoid):
 def ELM_Context(p):
     return p[1]
 
+# p, ndarray, Jordan network prediction
+# alpha, float, decay factor
+# returns context (i.e., the outpu layer + weighted context)
+def JOR_Context(p, alpha):
+    return p[-1] + alpha*p[0][:len(p[-1])]
+
 # Partially Recurrent Learning, training online
 # nn PR neural net instance
-# arch, string, bet architecture: "ELM", "JOR".
 # x is examples, list of ndarray instances (N sequences); (T,F), T seq
 #   samples, F features
 # t is targets, list of ndarray instances (N sequences); (T,O), T seq
@@ -363,9 +374,11 @@ def ELM_Context(p):
 # eta is lerning rate, float
 # af is activation function
 # c cost function, 'sqerr', 'xent' (af must be sigmoid, default)
+# arch, string, bet architecture: "ELM", "JOR".
+# alpha, float, decay factor for JOR
 # network weights are adjusted
 def PR_Backprop(nn, x, t, lam, nepoch, eta, af=Sigmoid, c='sqerr',
-    arch="ELM"):
+    arch="ELM", alpha=0.1):
     A = 1.7159
     B = 2.0 / 3.0
     tics = time.time()
@@ -373,11 +386,16 @@ def PR_Backprop(nn, x, t, lam, nepoch, eta, af=Sigmoid, c='sqerr',
         # example fitting
         for xi,ti in zip(x,t):
             # sequence iter
+            # Elman default
             context = np.zeros(nn[0].shape[0])
+            if arch=="JOR":
+                context = np.zeros(nn[-1].shape[0])
             for nx,nt in zip(xi,ti):
-                # Elman default
                 o = PR_Predict(nn, nx, context, af=af)
+                # Elman default
                 context = ELM_Context(o)
+                if arch=="JOR":
+                    context = JOR_Context(o, alpha=alpha)
                 if nt is not None:
                     err = MLP_Error(nn, o[-1], nt, c=c)
                     for lind in xrange(len(nn)):
@@ -403,12 +421,11 @@ def PR_Backprop(nn, x, t, lam, nepoch, eta, af=Sigmoid, c='sqerr',
             aux = l[:,0]
             l -= eta * lam / M * l
             l[:,0] = aux
-        print("J(" + str(epoch) + ") = " + str(PR_Cost(nn, x, t, lam, af=af, c=c, arch=arch)))
+        print("J(" + str(epoch) + ") = " + str(PR_Cost(nn, x, t, lam, af=af, c=c, arch=arch, alpha=alpha)))
     print("Elapsed time = " + str(time.time() - tics) + " seconds")
 
 # PRNN cost
 # nn PR neural net instance
-# arch, string, bet architecture: "ELM", "JOR".
 # x is examples, list of ndarray instances (N sequences); (T,F), T seq
 #   samples, F features
 # t is targets, list of ndarray instances (N sequences); (T,O), T seq
@@ -417,18 +434,24 @@ def PR_Backprop(nn, x, t, lam, nepoch, eta, af=Sigmoid, c='sqerr',
 # lam is Tikhonov regularisation, float
 # af is activation function
 # c cost function, 'sqerr', 'xent' (af must be sigmoid, default)
-def PR_Cost(nn, x, t, lam, af=Sigmoid, c='sqerr', arch="ELM"):
+# arch, string, bet architecture: "ELM", "JOR".
+# alpha, float, decay factor for JOR
+def PR_Cost(nn, x, t, lam, af=Sigmoid, c='sqerr', arch="ELM", alpha=0.1):
     gfit = 0.0
     # instance iter
     for xi,ti in zip(x,t):
         # sequence iter
         # Elman default
         context = np.zeros(nn[0].shape[0])
+        if arch=="JOR":
+            context = np.zeros(nn[-1].shape[0])
         sfit = 0.0
         for nx,nt in zip(xi,ti):
             o = PR_Predict(nn, nx, context, af=af)
             # Elman default
             context = ELM_Context(o)
+            if arch=="JOR":
+                context = JOR_Context(o, alpha=alpha)
             if nt is not None:
                 if c=='sqerr':
                     err = MLP_Error(nn, o[-1], nt, c=c)

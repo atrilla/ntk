@@ -50,24 +50,41 @@ nn = NeuralNetwork.ELM([1,3,1])
 NeuralNetwork.PR_Backprop(nn, x, y, 0.1, 20, 0.001, 
     af=NeuralNetwork.Sigmoid, c='sqerr', arch="ELM")
 
+jalpha = 0.1
+print("Jordan training...")
+nn = NeuralNetwork.JOR([1,3,1])
+NeuralNetwork.PR_Backprop(nn, x, y, 0.1, 20, 0.001, 
+    af=NeuralNetwork.Sigmoid, c='sqerr', arch="JOR", alpha=jalpha)
+
+# test seq
 test = genseq_decay()
 tx = test[:-1]
 ty = test[1:]
 
-err = []
+elm_err = []
 context = np.zeros(nn[0].shape[0])
 for n in xrange(len(tx)):
     o = NeuralNetwork.PR_Predict(nn, tx[n], context, 
         af=NeuralNetwork.Sigmoid)
     context = NeuralNetwork.ELM_Context(o)
-    err.append(ty[n][0] - o[-1][0])
+    elm_err.append(ty[n][0] - o[-1][0])
+
+jor_err = []
+context = np.zeros(nn[-1].shape[0])
+for n in xrange(len(tx)):
+    o = NeuralNetwork.PR_Predict(nn, tx[n], context, 
+        af=NeuralNetwork.Sigmoid)
+    context = NeuralNetwork.JOR_Context(o, alpha=jalpha)
+    jor_err.append(ty[n][0] - o[-1][0])
+
 
 plt.figure()
-plt.plot(err, 'b', label="Error")
+plt.plot(elm_err, 'b', label="Elman")
+plt.plot(jor_err, 'r', label="Jordan")
 plt.xlabel("Time")
 plt.ylabel("Value")
 plt.legend(loc = "upper right")
-plt.title("Elman net")
+plt.title("Partially Recurrent net")
 
 plt.show()
 

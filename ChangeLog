@@ -3,6 +3,10 @@
   * explore/NeuralNetwork.py (PR_Backprop, PR_Cost): Elman net.
   * explore/test_prnn.py
 
+  * explore/NeuralNetwork.py (JOR, PR_Cost, PR_Backprop): Jordan net.
+  alphas.
+  * explore/test_prnn.py
+
 
 04-Apr-2019  Alexandre Trilla  <alex@atrilla.net>
 
