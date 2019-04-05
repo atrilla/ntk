@@ -39,13 +39,15 @@ def genseq_decay():
 # Train
 x = []
 y = []
+print("Generating data...")
 for n in xrange(500):
     aux = genseq_decay()
     x.append(aux[:-1])
     y.append(aux[1:])
 
+print("Elman training...")
 nn = NeuralNetwork.ELM([1,3,1])
-NeuralNetwork.PR_Backprop(nn, x, y, 0.1, 20, 0.01, 
+NeuralNetwork.PR_Backprop(nn, x, y, 0.1, 20, 0.001, 
     af=NeuralNetwork.Sigmoid, c='sqerr', arch="ELM")
 
 test = genseq_decay()
@@ -55,8 +57,9 @@ ty = test[1:]
 err = []
 context = np.zeros(nn[0].shape[0])
 for n in xrange(len(tx)):
-    o = PR_Predict(nn, tx[n], context, af=NeuralNetwork.Sigmoid)
-    context = ELM_Context(o)
+    o = NeuralNetwork.PR_Predict(nn, tx[n], context, 
+        af=NeuralNetwork.Sigmoid)
+    context = NeuralNetwork.ELM_Context(o)
     err.append(ty[n][0] - o[-1][0])
 
 plt.figure()
@@ -67,5 +70,4 @@ plt.legend(loc = "upper right")
 plt.title("Elman net")
 
 plt.show()
-
 

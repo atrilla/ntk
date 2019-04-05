@@ -330,79 +330,120 @@ def SOM_Coord(N, bmu):
     y = (bmu + N)/N
     return [x,y]
 
-## Elman network
-## inilay, list with layer units, eg, [I,H,O]
-## return Elman neural net instance
-#def ELM(inilay):
-#    return MLP([inilay[0] + inilay[1], inilay[1], inilay[2]])
-#
-## nn is a partially recurrent neural net instance
-## x is ndarray, I features (input layer size), seq item at a given time
-## c is ndarray, context
-## af is activation function
-## return list of all neuron output values (ndarray) maintaining layer order
-#def PR_Predict(nn, x, c, af=Sigmoid):
-#    aux = np.append(c,x)
-#    return MLP_Predict(nn, aux, af=af)
-#
-## p, ndarray, Elman network prediction
-## returns context (i.e., the hidden layer)
-#def ELM_Context(p):
-#    return p[1]
-#
-## Partially Recurrent Learning, training online
-## nn PR neural net instance
-## arch, string, bet architecture: "ELM", "JOR".
-## x is examples, list of ndarray instances (N sequences); (T,F), T seq
-##   samples, F features
-## t is targets, list of ndarray instances (N sequences); (T,O), T seq
-##   samples, O outputs. O can be "None", and the nwt does not learn with
-##   that sequence sample. The sequence length T is arbitrary.
-## lam is Tikhonov regularisation, float
-## nepoch is num of iteration over the dataset, int
-## eta is lerning rate, float
-## af is activation function
-## c cost function, 'sqerr', 'xent' (af must be sigmoid, default)
-## network weights are adjusted
-#def PR_Backprop(nn, x, t, lam, nepoch, eta, af=Sigmoid, c='sqerr',
-#    arch="ELM"):
-#    A = 1.7159
-#    B = 2.0 / 3.0
-#    tics = time.time()
-#    for epoch in xrange(nepoch):
-#        # example fitting
-#        for xi,ti in zip(x,t):
-#            # sequence iter
-#            context = np.zeros(nn[0].shape[0])
-#            for nx,nt in zip(xi,ti):
-#                # Elman default
-#                o = PR_Predict(nn, nx, context, af=af)
-#                context = ELM_Context(o)
-#                if nt is not None:
-#                    err = MLP_Error(nn, o[-1], nt, c=c)
-#                    for lind in xrange(len(nn)):
-#                        l = nn[lind]
-#                        delta = np.ones(l.shape)
-#                        xx = o[lind].tolist()
-#                        xx.insert(0, 1)
-#                        xx = np.array(xx)
-#                        for i in xrange(delta.shape[0]):
-#                            if af == Sigmoid:
-#                                delta[i] *= eta * xx * err[lind][i] * o[lind+1][i] * (1 - o[lind+1][i])
-#                            elif af == HyperTan:
-#                                delta[i] *= eta * err[lind][i] * ( 1.0/A * (A**2 - (o[lind+1][i])**2) * B * xx)
-#                            elif af == ReLU:
-#                                if o[lind+1][i] > 0.0:
-#                                    delta[i] *= eta * xx * err[lind][i]
-#                                else:
-#                                    delta[i] = 0.0
-#                        l += delta
-#        # regularisation
-#        M = len(x)
-#        for l in nn:
-#            aux = l[:,0]
-#            l -= eta * lam / M * l
-#            l[:,0] = aux
-#        print("J(" + str(epoch) + ") = " + str(MLP_Cost(nn, x, t, lam, af=af, c=c)))
-#    print("Elapsed time = " + str(time.time() - tics) + " seconds")
-#
+# Elman network
+# inilay, list with layer units, eg, [I,H,O]
+# return Elman neural net instance
+def ELM(inilay):
+    return MLP([inilay[0] + inilay[1], inilay[1], inilay[2]])
+
+# nn is a partially recurrent neural net instance
+# x is ndarray, I features (input layer size), seq item at a given time
+# c is ndarray, context
+# af is activation function
+# return list of all neuron output values (ndarray) maintaining layer order
+def PR_Predict(nn, x, c, af=Sigmoid):
+    aux = np.append(c,x)
+    return MLP_Predict(nn, aux, af=af)
+
+# p, ndarray, Elman network prediction
+# returns context (i.e., the hidden layer)
+def ELM_Context(p):
+    return p[1]
+
+# Partially Recurrent Learning, training online
+# nn PR neural net instance
+# arch, string, bet architecture: "ELM", "JOR".
+# x is examples, list of ndarray instances (N sequences); (T,F), T seq
+#   samples, F features
+# t is targets, list of ndarray instances (N sequences); (T,O), T seq
+#   samples, O outputs. O can be "None", and the nwt does not learn with
+#   that sequence sample. The sequence length T is arbitrary.
+# lam is Tikhonov regularisation, float
+# nepoch is num of iteration over the dataset, int
+# eta is lerning rate, float
+# af is activation function
+# c cost function, 'sqerr', 'xent' (af must be sigmoid, default)
+# network weights are adjusted
+def PR_Backprop(nn, x, t, lam, nepoch, eta, af=Sigmoid, c='sqerr',
+    arch="ELM"):
+    A = 1.7159
+    B = 2.0 / 3.0
+    tics = time.time()
+    for epoch in xrange(nepoch):
+        # example fitting
+        for xi,ti in zip(x,t):
+            # sequence iter
+            context = np.zeros(nn[0].shape[0])
+            for nx,nt in zip(xi,ti):
+                # Elman default
+                o = PR_Predict(nn, nx, context, af=af)
+                context = ELM_Context(o)
+                if nt is not None:
+                    err = MLP_Error(nn, o[-1], nt, c=c)
+                    for lind in xrange(len(nn)):
+                        l = nn[lind]
+                        delta = np.ones(l.shape)
+                        xx = o[lind].tolist()
+                        xx.insert(0, 1)
+                        xx = np.array(xx)
+                        for i in xrange(delta.shape[0]):
+                            if af == Sigmoid:
+                                delta[i] *= eta * xx * err[lind][i] * o[lind+1][i] * (1 - o[lind+1][i])
+                            elif af == HyperTan:
+                                delta[i] *= eta * err[lind][i] * ( 1.0/A * (A**2 - (o[lind+1][i])**2) * B * xx)
+                            elif af == ReLU:
+                                if o[lind+1][i] > 0.0:
+                                    delta[i] *= eta * xx * err[lind][i]
+                                else:
+                                    delta[i] = 0.0
+                        l += delta
+        # regularisation
+        M = len(x)
+        for l in nn:
+            aux = l[:,0]
+            l -= eta * lam / M * l
+            l[:,0] = aux
+        print("J(" + str(epoch) + ") = " + str(PR_Cost(nn, x, t, lam, af=af, c=c, arch=arch)))
+    print("Elapsed time = " + str(time.time() - tics) + " seconds")
+
+# PRNN cost
+# nn PR neural net instance
+# arch, string, bet architecture: "ELM", "JOR".
+# x is examples, list of ndarray instances (N sequences); (T,F), T seq
+#   samples, F features
+# t is targets, list of ndarray instances (N sequences); (T,O), T seq
+#   samples, O outputs. O can be "None", and the nwt does not learn with
+#   that sequence sample. The sequence length T is arbitrary.
+# lam is Tikhonov regularisation, float
+# af is activation function
+# c cost function, 'sqerr', 'xent' (af must be sigmoid, default)
+def PR_Cost(nn, x, t, lam, af=Sigmoid, c='sqerr', arch="ELM"):
+    gfit = 0.0
+    # instance iter
+    for xi,ti in zip(x,t):
+        # sequence iter
+        # Elman default
+        context = np.zeros(nn[0].shape[0])
+        sfit = 0.0
+        for nx,nt in zip(xi,ti):
+            o = PR_Predict(nn, nx, context, af=af)
+            # Elman default
+            context = ELM_Context(o)
+            if nt is not None:
+                if c=='sqerr':
+                    err = MLP_Error(nn, o[-1], nt, c=c)
+                    sfit += np.sum(err[-1]**2)
+                if c=='xent':
+                    fit += np.sum(-(ti*np.log(o[-1]) + (1.0 - ti)*np.log(1.0 - o[-1])))
+        if c=='sqerr':
+            gfit += sfit/xi.shape[0]
+    if c=='sqerr':
+        gfit = gfit / float(len(t))
+    #
+    reg = 0
+    M = len(x)
+    for l in nn:
+        aux = l.flatten()
+        reg += (lam/(2.0 * M)) * aux.dot(aux)
+    return gfit + reg
+
