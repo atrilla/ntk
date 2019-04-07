@@ -29,9 +29,8 @@ import matplotlib.pyplot as plt
 # model exp decay
 def genseq_decay():
     t = np.array(range(50 + int(50*np.random.rand())))
-    A = 0.5 + 5.0*np.random.rand()
     alpha = -0.01 - 0.1*np.random.rand()
-    x = A*np.e**(alpha*t)
+    x = np.e**(alpha*t)
     x = x.reshape(len(x),1)
     return x
 
