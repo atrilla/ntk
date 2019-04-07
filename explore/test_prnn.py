@@ -46,14 +46,14 @@ for n in xrange(500):
     y.append(aux[1:])
 
 print("Elman training...")
-nn = NeuralNetwork.ELM([1,3,1])
-NeuralNetwork.PR_Backprop(nn, x, y, 0.1, 20, 0.001, 
+elm_nn = NeuralNetwork.ELM([1,3,1])
+NeuralNetwork.PR_Backprop(elm_nn, x, y, 0.1, 20, 0.001, 
     af=NeuralNetwork.Sigmoid, c='sqerr', arch="ELM")
 
 jalpha = 0.1
 print("Jordan training...")
-nn = NeuralNetwork.JOR([1,3,1])
-NeuralNetwork.PR_Backprop(nn, x, y, 0.1, 20, 0.001, 
+jor_nn = NeuralNetwork.JOR([1,3,1])
+NeuralNetwork.PR_Backprop(jor_nn, x, y, 0.1, 20, 0.001, 
     af=NeuralNetwork.Sigmoid, c='sqerr', arch="JOR", alpha=jalpha)
 
 # test seq
@@ -62,23 +62,24 @@ tx = test[:-1]
 ty = test[1:]
 
 elm_err = []
-context = np.zeros(nn[0].shape[0])
+context = np.zeros(elm_nn[0].shape[0])
 for n in xrange(len(tx)):
-    o = NeuralNetwork.PR_Predict(nn, tx[n], context, 
+    o = NeuralNetwork.PR_Predict(elm_nn, tx[n], context, 
         af=NeuralNetwork.Sigmoid)
     context = NeuralNetwork.ELM_Context(o)
     elm_err.append(ty[n][0] - o[-1][0])
 
 jor_err = []
-context = np.zeros(nn[-1].shape[0])
+context = np.zeros(jor_nn[-1].shape[0])
 for n in xrange(len(tx)):
-    o = NeuralNetwork.PR_Predict(nn, tx[n], context, 
+    o = NeuralNetwork.PR_Predict(jor_nn, tx[n], context, 
         af=NeuralNetwork.Sigmoid)
     context = NeuralNetwork.JOR_Context(o, alpha=jalpha)
     jor_err.append(ty[n][0] - o[-1][0])
 
 
 plt.figure()
+plt.plot(test, 'k', label="Data")
 plt.plot(elm_err, 'b', label="Elman")
 plt.plot(jor_err, 'r', label="Jordan")
 plt.xlabel("Time")
