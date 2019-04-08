@@ -74,14 +74,14 @@ def ReLU(x):
 def MLP_Predict(nn, x, af=Sigmoid):
     neuron = [x]
     ain = x.tolist()
-    ain.insert(0, 1)
+    ain.insert(0, 1.0)
     a = np.array(ain)
     for l in nn:
         z = l.dot(a)
         g = af(z)
         neuron.append(g)
         ahid = g.tolist()
-        ahid.insert(0,1)
+        ahid.insert(0,1.0)
         a = np.array(ahid)
     return neuron
 
@@ -124,7 +124,7 @@ def MLP_Backprop(nn, x, t, lam, nepoch, eta, af=Sigmoid, c='sqerr'):
                 l = nn[lind]
                 delta = np.ones(l.shape)
                 xx = o[lind].tolist()
-                xx.insert(0, 1)
+                xx.insert(0, 1.0)
                 xx = np.array(xx)
                 for i in xrange(delta.shape[0]):
                     if af == Sigmoid:
@@ -402,7 +402,7 @@ def PR_Backprop(nn, x, t, lam, nepoch, eta, af=Sigmoid, c='sqerr',
                         l = nn[lind]
                         delta = np.ones(l.shape)
                         xx = o[lind].tolist()
-                        xx.insert(0, 1)
+                        xx.insert(0, 1.0)
                         xx = np.array(xx)
                         for i in xrange(delta.shape[0]):
                             if af == Sigmoid:
@@ -469,4 +469,47 @@ def PR_Cost(nn, x, t, lam, af=Sigmoid, c='sqerr', arch="ELM", alpha=0.1):
         aux = l.flatten()
         reg += (lam/(2.0 * M)) * aux.dot(aux)
     return gfit + reg
+
+# Reinforcement Learning - Adaline
+# inilay, list with layer units, eg, [I,O]
+# return neural net instance (Adaline)
+#   outputs are one-hot encoded vectors (+/- 1) representing the actions
+def RL(inilay):
+    nn = MLP(inilay)
+    return nn
+
+def RL_Predict(nn, x):
+    return MLP_Predict(nn, x, af=HyperTan)
+
+# p is a prediction
+def RL_Action(p):
+    o = p[-1]
+    return np.argmax(o)
+
+# average output
+# past and present are output predictions, ndarray
+# return new past average, ndarray
+def RL_AvgAct(past, present):
+    return past*0.3 + 0.7*present
+
+# Associative Reward-Penalty Learning, training online
+# nn neural net instance
+# p is list of ndarray, prediction
+# pact is ndarray, past predictions average
+# r is float, reward
+# eta is lerning rate, float
+# network weights are adjusted
+def RL_ARP(nn, p, pact, r, eta):
+    w = nn[0]
+    a = p[-1]
+    neta = eta*r + eta*(r+1.0)/20.0
+    aux = []
+    netin = p[0].tolist()
+    netin.insert(0, 1.0)
+    netin = np.array(netin)
+    for o in range(w.shape[0]):
+        aux.append(w[o] + \
+                neta*(r*(a[o]-pact[o]) + (1.0-r)*(-a[o]-pact[o]))*\
+                netin)
+    nn[0] = np.array(aux)
 
