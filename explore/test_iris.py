@@ -23,7 +23,7 @@
 
 import NeuralNetwork
 from sklearn import datasets as dset
-from sklearn.cross_validation import StratifiedShuffleSplit
+from sklearn.utils import shuffle
 import numpy as np
 
 iris = dset.load_iris()
@@ -39,17 +39,15 @@ for i in iris.target:
 y = np.array(t)
 X = iris.data
 
-lam = 0.2
+sx,sy = shuffle(X,y)
 
-sss = StratifiedShuffleSplit(y, 1, test_size=0.3, random_state=0)
-for train_index, test_index in sss:
-	X_train, X_test = X[train_index], X[test_index]
-	y_train, y_test = y[train_index], y[test_index]
-	nn = NeuralNetwork.MLP([4,4,3])
-	print("Training...")
-	NeuralNetwork.MLP_Backprop(nn, X_train, y_train, lam, 20, 0.1)
-	#NeuralNetwork.MLP_NumGradDesc(nn, X_train, y_train, lam, 20, 0.1)
-	print("Testing...")
-	tcost = NeuralNetwork.MLP_Cost(nn, X_test, y_test, lam)
-	print("J = " + str(tcost))
+lam = 0.1
+
+nn = NeuralNetwork.MLP([4,2,3])
+print("Training...")
+NeuralNetwork.MLP_Backprop(nn, sx[:100], y[:100], lam, 100, 0.0001)
+#NeuralNetwork.MLP_NumGradDesc(nn, X_train, y_train, lam, 20, 0.1)
+print("Testing...")
+tcost = NeuralNetwork.MLP_Cost(nn, sx[100:], y[100:], lam)
+print("J = " + str(tcost))
 
