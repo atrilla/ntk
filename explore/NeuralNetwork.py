@@ -471,32 +471,40 @@ def PR_Cost(nn, x, t, lam, af=Sigmoid, c='sqerr', arch="ELM", alpha=0.1):
     return gfit + reg
 
 # Reinforcement Learning - Adaline
-# inilay, list with layer units, eg, [I,O]
+# inilay, int with input layer units, eg, [I,1]
 # return neural net instance (Adaline)
 #   outputs are one-hot encoded vectors (+/- 1) representing the actions
 def RL(inilay):
-    nn = MLP(inilay)
+    nn = MLP([inilay, 1])
     return nn
 
 def RL_Predict(nn, x):
     return MLP_Predict(nn, x, af=HyperTan)
 
 # p is a prediction
+# return 0 or 1, binary action
 def RL_Action(p):
-    o = p[-1]
-    return np.argmax(o)
+    o = p[-1][0]
+    prea = np.sign(o)/2.0 + 0.5
+    # stochastic blip, 5% of the time
+    if np.abs(np.random.randn()) > 2.0:
+        if prea == 0:
+            prea = 1
+        else:
+            prea = 0
+    return prea
 
 # average output
 # past and present are output predictions, ndarray
 # return new past average, ndarray
 def RL_AvgAct(past, present):
-    return past*0.3 + 0.7*present
+    return past*0.2 + 0.8*present
 
 # Associative Reward-Penalty Learning, training online
 # nn neural net instance
 # p is list of ndarray, prediction
 # pact is ndarray, past predictions average
-# r is float, reward
+# r is float, reward, 0 (bad), 1 (good)
 # eta is lerning rate, float
 # network weights are adjusted
 def RL_ARP(nn, p, pact, r, eta):

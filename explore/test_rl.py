@@ -29,18 +29,28 @@
 import NeuralNetwork
 import numpy as np
 import gym
+import matplotlib.pyplot as plt
 
-nn = NeuralNetwork.RL([4,2])
-past = np.array([0.0, 0.0])
+nn = NeuralNetwork.RL(4)
+past = np.array([0.0])
 
-def critic(angle):
+# maintain pole vertically
+def critic(angle, speed, accel):
     amax = 1.0
-    return (amax**2 - angle**2)/amax**2
+    omax = 1.0
+    accmax = 1.0
+    alph = np.max([(amax**2 - angle**2)/amax**2, 0.0])
+    omeg = np.max([(omax**2 - speed**2)/omax**2, 0.0])
+    acce = np.max([(accmax**2 - accel**2)/accmax**2, 0.0])
+    return (alph + omeg + acce)/3.0
 
+timeperf = []
 env = gym.make('CartPole-v0')
-for i_episode in range(20):
+for i_episode in range(50):
     observation = env.reset()
-    for t in range(100):
+    end = False
+    toptime = 100
+    for t in range(toptime):
         env.render()
         #action = env.action_space.sample()
         print(observation)
@@ -48,13 +58,25 @@ for i_episode in range(20):
         #if observation[1] > 0.0:
         #    action = 0
         pred = NeuralNetwork.RL_Predict(nn, observation)
-        action = NeuralNetwork.RL_Action(pred)
+        action = int(NeuralNetwork.RL_Action(pred))
         past = NeuralNetwork.RL_AvgAct(past, pred[-1])
+        oldobs = observation
         observation, reward, done, info = env.step(action)
-        r = critic(observation[1])
-        NeuralNetwork.RL_ARP(nn, pred, past, r, 0.01)
+        r = critic(observation[1], observation[3], 
+                observation[3] - oldobs[3])
+        NeuralNetwork.RL_ARP(nn, pred, past, r, 3.0)
         if done:
+            end = True
+            timeperf.append(t)
             print("Episode finished after {} timesteps".format(t+1))
             break
+    if not end:
+        timeperf.append(toptime)
 env.close()
 
+plt.figure()
+plt.plot(timeperf)
+plt.xlabel("Epoch")
+plt.ylabel("Time upright")
+plt.title("Cart-pole balancing performance")
+plt.show()

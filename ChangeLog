@@ -1,3 +1,9 @@
+10-Apr-2019  Alexandre Trilla  <alex@atrilla.net>
+
+  * explore/NeuralNetwork.py (RL, RL_Action, RL_AvgAct): single neuron
+  - adaline, stochastic act.
+  * explore/test_rl.py: angle accel, params.
+
 09-Apr-2019  Alexandre Trilla  <alex@atrilla.net>
 
   * explore/test_iris.py: instance shuffle.
