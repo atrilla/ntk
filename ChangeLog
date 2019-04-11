@@ -1,6 +1,6 @@
 11-Apr-2019  Alexandre Trilla  <alex@atrilla.net>
 
-  * explore/test_rl.py: starts learning after 20 epochs.
+  * explore/test_rl.py: starts learning after some rounds, various critics.
   * explore/NeuralNetwork.py (RL_AvgAct): more past impact.
   * explore/NeuralNetwork.py (RL_ARP): more lear rate diff between good and
   bad feedback.
