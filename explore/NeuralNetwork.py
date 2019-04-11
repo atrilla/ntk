@@ -498,7 +498,7 @@ def RL_Action(p):
 # past and present are output predictions, ndarray
 # return new past average, ndarray
 def RL_AvgAct(past, present):
-    return past*0.2 + 0.8*present
+    return past*0.9 + 0.1*present
 
 # Associative Reward-Penalty Learning, training online
 # nn neural net instance
@@ -510,7 +510,7 @@ def RL_AvgAct(past, present):
 def RL_ARP(nn, p, pact, r, eta):
     w = nn[0]
     a = p[-1]
-    neta = eta*r + eta*(r+1.0)/20.0
+    neta = eta*r + eta*(r+1.0)/100.0
     aux = []
     netin = p[0].tolist()
     netin.insert(0, 1.0)
