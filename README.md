@@ -51,9 +51,12 @@ one.
 * [Multilayer Perceptron](https://github.com/atrilla/ntk/blob/master/explore/Multilayer.ipynb)
 * [Time-Delay Neural Network](https://github.com/atrilla/ntk/blob/master/explore/Time-Delay.ipynb) - 1D Convolutional Neural Network
 * [Deep Neural Network](https://github.com/atrilla/ntk/blob/master/explore/Deep.ipynb)
+
+## Other tests
+
 * Self-Organising Map - Kohonen Network
-* Autoencoder
-* Recurrent Neural Network - Elman, Jordan
+* Autoencoder - Auto-associative Neural Network
+* Recurrent Neural Network - Elman/Jordan Network
 * Reinforcement Learning - Adaline, Associative Reward-Penalty
 
 ## Requirements

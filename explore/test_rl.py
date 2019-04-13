@@ -47,6 +47,7 @@ def _critic(info):
     acc = np.max([(amax**2 - ddphi**2)/amax**2, 0.0])
     return (0.2*loc + 0.3*vel + 0.5*acc)
 
+# acceleration...
 def _critic(info):
     phi = info[0]
     dphi = info[1] - info[0]
@@ -54,10 +55,11 @@ def _critic(info):
     ddphi = aux - dphi
     return np.max([0.0, 1.0 - 1.0*phi**2 - 5.0*dphi**2 - 10.0*ddphi**2])
 
+# pid...
 def critic(info):
     phi = info[0]
-    dphi = info[1] - info[0]
-    iphi = (info[1] + info[0])/2.0
+    dphi = info[0] - info[1]
+    iphi = np.mean(info)
     return np.max([0.0, 1.0 - 1.0*phi**2 - 1.0*dphi**2 - 1.0*iphi**2])
 
 nn = NeuralNetwork.RL(4)
