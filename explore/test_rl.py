@@ -28,24 +28,26 @@
 #
 # https://github.com/openai/gym/wiki/CartPole-v0
 
+# Random action lasts 10 timesteps
+
 import NeuralNetwork
 import numpy as np
 import gym
 import matplotlib.pyplot as plt
 
-# acceleration...
+# impact of acceleration...
 def critic(info):
     phi = info[0]
     dphi = info[0] - info[1]
     aux = info[1] - info[2]
     ddphi = aux - dphi
-    return np.max([0.0, 1.0 - 1.0*(phi**2 + 10*dphi**2 + 10*ddphi**2)])
+    #print("Critic: " + str(phi) + " , " + str(dphi) + " , " + str(ddphi))
+    return np.max([0.0, 1.0 - 1.0*(phi**2 + 10*dphi**2 + 100*ddphi**2)])
 
 def pid(info):
     phi = info[0]
     dphi = info[0] - info[1]
     iphi = np.mean(info)
-#    return 10.0*np.array([phi, dphi, iphi])
     return 10.0*np.array([phi, dphi, iphi])
 
 nn = NeuralNetwork.RL(3)
@@ -61,19 +63,23 @@ for i_episode in range(100):
     for t in range(toptime):
         env.render()
         #action = env.action_space.sample()
-        pred = NeuralNetwork.RL_Predict(nn, pid(obsang))
+        ninp = pid(obsang)
+        #print(ninp)
+        pred = NeuralNetwork.RL_Predict(nn, ninp)
         action = int(NeuralNetwork.RL_Action(pred))
         past = NeuralNetwork.RL_AvgAct(past, pred[-1])
         observation, reward, done, info = env.step(action)
         obsang.pop()
         obsang.insert(0, observation[2])
         r = critic(obsang)
-        print(r)
-        NeuralNetwork.RL_ARP(nn, pred, past, r, 5.0)
+        #print(r)
+        NeuralNetwork.RL_ARP(nn, pred, past, r, 0.1)
         if r < 0.6:
             end = True
             timeperf.append(t)
+            print("============================================")
             print("Episode finished after {} timesteps".format(t+1))
+            print("============================================")
             break
     if not end:
         timeperf.append(toptime)
