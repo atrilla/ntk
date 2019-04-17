@@ -35,22 +35,24 @@ import numpy as np
 import gym
 import matplotlib.pyplot as plt
 
-# impact of acceleration...
+# upright validation
 def critic(info):
     phi = info[0]
-    dphi = info[0] - info[1]
-    aux = info[1] - info[2]
-    ddphi = aux - dphi
-    #print("Critic: " + str(phi) + " , " + str(dphi) + " , " + str(ddphi))
-    return np.max([0.0, 1.0 - 1.0*(phi**2 + 10*dphi**2 + 100*ddphi**2)])
+    return np.max([0.0, 1.0 - 1.0*phi**2])
 
+# pid error of phi and dphi (vel)
 def pid(info):
+    # space
     phi = info[0]
     dphi = info[0] - info[1]
     iphi = np.mean(info)
-    return 10.0*np.array([phi, dphi, iphi])
+    vel = dphi
+    # acceleration is dvel
+    dvel = vel - (info[1] - info[2])
+    ivel = np.mean([vel, info[1] - info[2]])
+    return 10.0*np.array([phi, dphi, iphi, dvel, ivel])
 
-nn = NeuralNetwork.RL(3)
+nn = NeuralNetwork.RL(5)
 
 timeperf = []
 env = gym.make('CartPole-v0')
@@ -64,7 +66,6 @@ for i_episode in range(100):
         env.render()
         #action = env.action_space.sample()
         ninp = pid(obsang)
-        #print(ninp)
         pred = NeuralNetwork.RL_Predict(nn, ninp)
         action = int(NeuralNetwork.RL_Action(pred))
         past = NeuralNetwork.RL_AvgAct(past, pred[-1])
@@ -72,14 +73,11 @@ for i_episode in range(100):
         obsang.pop()
         obsang.insert(0, observation[2])
         r = critic(obsang)
-        #print(r)
-        NeuralNetwork.RL_ARP(nn, pred, past, r, 0.1)
+        NeuralNetwork.RL_ARP(nn, pred, past, r, 0.3)
         if r < 0.6:
             end = True
             timeperf.append(t)
-            print("============================================")
-            print("Episode finished after {} timesteps".format(t+1))
-            print("============================================")
+            print(">>>> Episode finished after {} timesteps".format(t+1))
             break
     if not end:
         timeperf.append(toptime)
