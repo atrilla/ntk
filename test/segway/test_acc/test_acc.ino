@@ -1,9 +1,19 @@
 #include <Wire.h>
 
 #define accel_module (0x1D)
-byte x[10];
-byte z[10];
+int X,Y,Z;
 char output[512];
+
+// return centi g
+int accNorm(byte d) {
+    int sign = 1;
+    int aux;
+    int dat = (int)d;
+    if (dat > 127) {
+        dat = dat | 0b1111111100000000;
+    }
+    return dat*100/63;
+}
 
 void setup() {
     Wire.begin();
@@ -22,6 +32,7 @@ char reg;
 int count;
 
 void loop() {
+    byte val;
     count += 1;
     Wire.beginTransmission(accel_module);
     Wire.write(0x09); // Status
@@ -36,17 +47,27 @@ void loop() {
             Wire.endTransmission();
             Wire.requestFrom(accel_module, 1);
             while (Wire.available()) {
-                x[0] = Wire.read();
+                val = Wire.read();
+                X = accNorm(val);
+            }
+            Wire.beginTransmission(accel_module);
+            Wire.write(0x07); // Y
+            Wire.endTransmission();
+            Wire.requestFrom(accel_module, 1);
+            while (Wire.available()) {
+                val = Wire.read();
+                Y = accNorm(val);
             }
             Wire.beginTransmission(accel_module);
             Wire.write(0x08); // Z
             Wire.endTransmission();
             Wire.requestFrom(accel_module, 1);
             while (Wire.available()) {
-                z[0] = Wire.read();
+                val = Wire.read();
+                Z = accNorm(val);
             }
             if (count > 1000) {
-                sprintf(output, "X: %d, Z: %d \n\0", x[0], z[0]); 
+                sprintf(output, "X: %d, Y: %d, Z: %d \n\0", X, Y, Z);
                 Serial.print(output);
                 count = 0;
             }
