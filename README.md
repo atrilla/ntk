@@ -48,9 +48,9 @@ one.
 
 ## Notebooks
 
-* [Multilayer Perceptron](https://github.com/atrilla/ntk/blob/master/explore/Multilayer.ipynb)
+* [Multilayer Perceptron](https://github.com/atrilla/ntk/blob/master/explore/Multilayer.ipynb) - Backpropagation
 * [Time-Delay Neural Network](https://github.com/atrilla/ntk/blob/master/explore/Time-Delay.ipynb) - 1D Convolutional Neural Network
-* [Deep Neural Network](https://github.com/atrilla/ntk/blob/master/explore/Deep.ipynb)
+* [Deep Neural Network](https://github.com/atrilla/ntk/blob/master/explore/Deep.ipynb) - ReLU
 
 ## Other tests
 
@@ -58,6 +58,7 @@ one.
 * Autoencoder - Auto-associative Neural Network
 * Recurrent Neural Network - Elman/Jordan Network
 * Reinforcement Learning - Adaline, Associative Reward-Penalty
+* Sensitivity Analysis - Profile method
 
 ## Requirements
 

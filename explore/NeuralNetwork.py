@@ -521,3 +521,29 @@ def RL_ARP(nn, p, pact, r, eta):
                 netin)
     nn[0] = np.array(aux)
 
+# Sensitivity analysis using the profile method. Single output.
+# Pre: all input vars need to be standardised (assumed normally dist). 
+# Pre: output range [0,1]
+# Profile is defined within [-2,2] (95% of confidence interval)
+# Blocked values: [-2, -0.6745, 0, 0.6745, 2]
+# nn neural net instance
+# return list of profiles: [[x1],[x2],...,[xN]]
+def SE_Profile(nn, af=Sigmoid):
+    nin = nn[0].shape[1] - 1
+    sens = np.array(range(13))/12.0*4.0 - 2.0
+    block = np.array([-2.0, -0.6745, 0.0, 0.6745, 2.0])
+    prof = []
+    for i in xrange(nin):
+        nuin = []
+        for s in sens:
+            results = []
+            for b in block:
+                x = b * np.ones(nin)
+                x[i] = s
+                o = MLP_Predict(nn, x, af=af)
+                results.append(o[-1][0])
+            results = np.array(results)
+            nuin.append(np.median(results))
+        prof.append(nuin)
+    return np.array(prof)
+

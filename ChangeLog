@@ -1,3 +1,9 @@
+19-Nov-2019  Alexandre Trilla  <alex@atrilla.net>
+
+  * explore/NeuralNetwork.py (SE_Profile): sensitivity analysis with the
+  profile method.
+
+
 22-Apr-2019  Alexandre Trilla  <alex@atrilla.net>
 
   * test/segway/test_acc: value normaisation.
