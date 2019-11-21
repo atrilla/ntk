@@ -1,3 +1,8 @@
+21-Nov-2019  Alexandre Trilla  <alex@atrilla.net>
+
+  * explore/NeuralNetwork.py (MLP_Sklearn): import from sklearn.
+
+
 19-Nov-2019  Alexandre Trilla  <alex@atrilla.net>
 
   * explore/NeuralNetwork.py (SE_Profile): sensitivity analysis with the

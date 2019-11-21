@@ -547,3 +547,17 @@ def SE_Profile(nn, af=Sigmoid):
         prof.append(nuin)
     return np.array(prof)
 
+# Build net from sklearn NN.
+# win, intin: input-to-hidden
+# wout, intout; hidden-to-output
+# return nn instance
+def MLP_Sklearn(win, intin, wout, intout):
+    layer = []
+    aux = np.transpose(win)
+    aux = np.insert(aux, 0, intin, axis=1)
+    layer.append(aux)
+    aux = np.transpose(wout)
+    aux = np.insert(aux, 0, intout, axis=1)
+    layer.append(aux)
+    return layer
+
