@@ -41,7 +41,7 @@ def MLP_InitWeight(Lin, Lout):
     return np.random.uniform(-epsilon, epsilon, [Lout, Lin])
 
 # Logistic activation function
-def Sigmoid(x):
+def Logistic(x):
     return 1.0 / (1.0 + np.exp(-x))
 
 # Recommended tanh activation function
@@ -71,7 +71,7 @@ def ReLU(x):
 # nn is neural net instance
 # af is activation function
 # return list of all neuron output values (ndarray) maintaining layer order
-def MLP_Predict(nn, x, af=Sigmoid):
+def MLP_Predict(nn, x, af=Logistic):
     neuron = [x]
     ain = x.tolist()
     ain.insert(0, 1.0)
@@ -111,7 +111,7 @@ def MLP_Error(nn, o, t, c='sqerr'):
 # af is activation function
 # c cost function, 'sqerr', 'xent' (af must be sigmoid, default)
 # network weights are adjusted
-def MLP_Backprop(nn, x, t, lam, nepoch, eta, af=Sigmoid, c='sqerr'):
+def MLP_Backprop(nn, x, t, lam, nepoch, eta, af=Logistic, c='sqerr'):
     A = 1.7159
     B = 2.0 / 3.0
     tics = time.time()
@@ -127,7 +127,7 @@ def MLP_Backprop(nn, x, t, lam, nepoch, eta, af=Sigmoid, c='sqerr'):
                 xx.insert(0, 1.0)
                 xx = np.array(xx)
                 for i in xrange(delta.shape[0]):
-                    if af == Sigmoid:
+                    if af == Logistic:
                         delta[i] *= eta * xx * err[lind][i] * o[lind+1][i] * (1 - o[lind+1][i])
                     elif af == HyperTan:
                         delta[i] *= eta * err[lind][i] * ( 1.0/A * (A**2 - (o[lind+1][i])**2) * B * xx)
@@ -152,7 +152,7 @@ def MLP_Backprop(nn, x, t, lam, nepoch, eta, af=Sigmoid, c='sqerr'):
 # lam is Tikhonov regularisation, float
 # af is activation function
 # c cost function, 'sqerr' (default), 'xent'
-def MLP_Cost(nn, x, t, lam, af=Sigmoid, c='sqerr'):
+def MLP_Cost(nn, x, t, lam, af=Logistic, c='sqerr'):
     fit = 0
     if c=='sqerr':
         sqerr = 0
@@ -183,7 +183,7 @@ def MLP_Cost(nn, x, t, lam, af=Sigmoid, c='sqerr'):
 # eta is lerning rate, float
 # af is activation function
 # network weights are adjusted
-def MLP_NumGradDesc(nn, x, t, lam, nepoch, eta, af=Sigmoid):
+def MLP_NumGradDesc(nn, x, t, lam, nepoch, eta, af=Logistic):
     incr = 0.0001
     tics = time.time()
     for epoch in xrange(nepoch):
@@ -229,19 +229,19 @@ def TDNN_Filter(N, alpha, d):
     g = (n/(d+1.0))**alpha * np.exp(alpha*(1.0-n)/(d+1.0))/s
     return g
 
-def TDNN_Predict(tdnn, x, af=Sigmoid):
+def TDNN_Predict(tdnn, x, af=Logistic):
     g = tdnn[0]
     mlp = tdnn[1]
     gx = g.dot(x)
     return MLP_Predict(mlp, gx, af=af)
 
-def TDNN_Backprop(tdnn, x, t, lam, nepoch, eta, af=Sigmoid):
+def TDNN_Backprop(tdnn, x, t, lam, nepoch, eta, af=Logistic):
     g = tdnn[0]
     mlp = tdnn[1]
     gx = x.dot(g.transpose())
     MLP_Backprop(mlp, gx, t, lam, nepoch, eta, af=af)
 
-def TDNN_Cost(tdnn, x, t, lam, af=Sigmoid):
+def TDNN_Cost(tdnn, x, t, lam, af=Logistic):
     g = tdnn[0]
     mlp = tdnn[1]
     gx = x.dot(g.transpose())
@@ -347,7 +347,7 @@ def JOR(inilay):
 # c is ndarray, context
 # af is activation function
 # return list of all neuron output values (ndarray) maintaining layer order
-def PR_Predict(nn, x, c, af=Sigmoid):
+def PR_Predict(nn, x, c, af=Logistic):
     aux = np.append(c,x)
     return MLP_Predict(nn, aux, af=af)
 
@@ -377,7 +377,7 @@ def JOR_Context(p, alpha):
 # arch, string, bet architecture: "ELM", "JOR".
 # alpha, float, decay factor for JOR
 # network weights are adjusted
-def PR_Backprop(nn, x, t, lam, nepoch, eta, af=Sigmoid, c='sqerr',
+def PR_Backprop(nn, x, t, lam, nepoch, eta, af=Logistic, c='sqerr',
     arch="ELM", alpha=0.1):
     A = 1.7159
     B = 2.0 / 3.0
@@ -405,7 +405,7 @@ def PR_Backprop(nn, x, t, lam, nepoch, eta, af=Sigmoid, c='sqerr',
                         xx.insert(0, 1.0)
                         xx = np.array(xx)
                         for i in xrange(delta.shape[0]):
-                            if af == Sigmoid:
+                            if af == Logistic:
                                 delta[i] *= eta * xx * err[lind][i] * o[lind+1][i] * (1 - o[lind+1][i])
                             elif af == HyperTan:
                                 delta[i] *= eta * err[lind][i] * ( 1.0/A * (A**2 - (o[lind+1][i])**2) * B * xx)
@@ -436,7 +436,7 @@ def PR_Backprop(nn, x, t, lam, nepoch, eta, af=Sigmoid, c='sqerr',
 # c cost function, 'sqerr', 'xent' (af must be sigmoid, default)
 # arch, string, bet architecture: "ELM", "JOR".
 # alpha, float, decay factor for JOR
-def PR_Cost(nn, x, t, lam, af=Sigmoid, c='sqerr', arch="ELM", alpha=0.1):
+def PR_Cost(nn, x, t, lam, af=Logistic, c='sqerr', arch="ELM", alpha=0.1):
     gfit = 0.0
     # instance iter
     for xi,ti in zip(x,t):
@@ -528,7 +528,7 @@ def RL_ARP(nn, p, pact, r, eta):
 # Blocked values: [-2, -0.6745, 0, 0.6745, 2]
 # nn neural net instance
 # return list of profiles: [[x1],[x2],...,[xN]]
-def SE_Profile(nn, af=Sigmoid):
+def SE_Profile(nn, af=Logistic):
     nin = nn[0].shape[1] - 1
     sens = np.array(range(13))/12.0*4.0 - 2.0
     block = np.array([-2.0, -0.6745, 0.0, 0.6745, 2.0])

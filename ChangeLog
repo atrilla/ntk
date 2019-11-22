@@ -1,5 +1,10 @@
 21-Nov-2019  Alexandre Trilla  <alex@atrilla.net>
 
+  * explore/NeuralNetwork.py (Logistic): old Sigmoid.
+
+
+21-Nov-2019  Alexandre Trilla  <alex@atrilla.net>
+
   * explore/NeuralNetwork.py (MLP_Sklearn): import from sklearn.
 
 
