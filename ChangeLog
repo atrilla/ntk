@@ -1,3 +1,9 @@
+24-Nov-2019  Alexandre Trilla  <alex@atrilla.net>
+
+  * explore/NeuralNetwork.py (MLP_GA): created.
+  * explore/test_ga.py
+
+
 21-Nov-2019  Alexandre Trilla  <alex@atrilla.net>
 
   * explore/NeuralNetwork.py (Logistic): old Sigmoid.

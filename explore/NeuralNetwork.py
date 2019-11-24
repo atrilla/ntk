@@ -109,7 +109,7 @@ def MLP_Error(nn, o, t, c='sqerr'):
 # nepoch is num of iteration over the dataset, int
 # eta is lerning rate, float
 # af is activation function
-# c cost function, 'sqerr', 'xent' (af must be sigmoid, default)
+# c cost function, 'sqerr', 'xent' (af must be logistic, default)
 # network weights are adjusted
 def MLP_Backprop(nn, x, t, lam, nepoch, eta, af=Logistic, c='sqerr'):
     A = 1.7159
@@ -373,7 +373,7 @@ def JOR_Context(p, alpha):
 # nepoch is num of iteration over the dataset, int
 # eta is lerning rate, float
 # af is activation function
-# c cost function, 'sqerr', 'xent' (af must be sigmoid, default)
+# c cost function, 'sqerr', 'xent' (af must be logistic, default)
 # arch, string, bet architecture: "ELM", "JOR".
 # alpha, float, decay factor for JOR
 # network weights are adjusted
@@ -433,7 +433,7 @@ def PR_Backprop(nn, x, t, lam, nepoch, eta, af=Logistic, c='sqerr',
 #   that sequence sample. The sequence length T is arbitrary.
 # lam is Tikhonov regularisation, float
 # af is activation function
-# c cost function, 'sqerr', 'xent' (af must be sigmoid, default)
+# c cost function, 'sqerr', 'xent' (af must be logistic, default)
 # arch, string, bet architecture: "ELM", "JOR".
 # alpha, float, decay factor for JOR
 def PR_Cost(nn, x, t, lam, af=Logistic, c='sqerr', arch="ELM", alpha=0.1):
@@ -561,3 +561,91 @@ def MLP_Sklearn(win, intin, wout, intout):
     layer.append(aux)
     return layer
 
+# Genetic Algorithm for training (evolutionary approach, metaheuristic)
+# inilay, list with layer units, eg, [2,4,1], hidden layer with 4 units
+# x is examples, ndarray (N,F), N instances, F features
+# t is targets, ndarray (N,O), N instances, O outputs
+# nepoch is num of evolution rounds
+# af is activation function
+# c cost function (fitness), 'sqerr', 'xent' (af must be logistic, default)
+# npopu is number of population candidates
+# mutp is mutation probability (sets one random weight to zero)
+# return grown/developed neural net instance
+def MLP_GA(inilay, x, t, nepoch, npopu, mutp=0.01, af=Logistic, c='sqerr'):
+    # input 2 NN parents to be crossed
+    # return child
+    def _GA_Crossover(nn1, nn2):
+        midx = int(np.random.rand()*len(nn1))
+        shap = nn1[midx].shape
+        flat1 = nn1[midx].flatten()
+        flat2 = nn2[midx].flatten()
+        child = []
+        # parent 1 genes
+        for i in range(midx):
+            child.append(nn1[i])
+        # mix of genes from p1 and p2
+        widx = int(np.random.rand()*len(flat1))
+        half1 = flat1[:widx]
+        flatchild = half1.tolist()
+        half2 = flat2[widx:]
+        half2 = half2.tolist()
+        flatchild.extend(half2)
+        flatchild = np.array(flatchild)
+        flatchild = flatchild.reshape(shap)
+        child.append(flatchild)
+        # parent 2 genes
+        for i in range(midx+1, len(nn2)):
+            child.append(nn2[i])
+        return child
+ 
+    # Generate init population
+    popu = []
+    for i in xrange(npopu):
+        popu.append(MLP(inilay))
+    # Evolutionary process
+    for epoch in xrange(nepoch):
+        # Eval candidate fitness
+        fit = []
+        prelbst = -1
+        prelscore = 1e6
+        for candidate in popu:
+            fit.append(MLP_Cost(candidate, x, t, 0.0, af=af, c=c))
+            if fit[-1] < prelscore:
+                prelbst = len(fit)
+                prelscore = fit[-1]
+        print("GA epoch = " + str(epoch) + ", best J: " + str(prelscore))
+        # Select best (discard worst half, cost > mean)
+        mean = np.mean(fit)
+        toberemoved = []
+        for i in xrange(npopu):
+            if fit[i] > (mean):
+                toberemoved.append(i)
+        while len(toberemoved) > 0:
+            item = toberemoved.pop()
+            popu.pop(item)
+            fit.pop(item)
+        # Crossover, restore original population size
+        tobegen = npopu - len(popu)
+        newcand = []
+        for i in xrange(tobegen):
+            ind_p1 = int(np.random.rand()*len(popu))
+            ind_p2 = int(np.random.rand()*len(popu))
+            while ind_p1 == ind_p2:
+                ind_p2 = int(np.random.rand()*len(popu))
+            newcand.append(_GA_Crossover(popu[ind_p1], popu[ind_p2]))
+        # Mutate new candidates
+        for i in newcand:
+            if np.random.rand() < mutp:
+                midx = int(np.random.rand()*len(i))
+                shap = i[midx].shape
+                flat = i[midx].flatten()
+                widx = int(np.random.rand()*len(flat))
+                flat[widx] = 0.0
+                i[midx] = flat.reshape(shap)
+        popu.extend(newcand)
+    # Return best candidate
+    fit = []
+    for candidate in popu:
+        fit.append(MLP_Cost(candidate, x, t, 0.0, af=af, c=c))
+    return popu[np.argmin(fit)]
+ 
