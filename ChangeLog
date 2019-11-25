@@ -1,3 +1,9 @@
+25-Nov-2019  Alexandre Trilla  <alex@atrilla.net>
+
+  * explore/NeuralNetwork.py (MLP_GA): mutation with rand value.
+  * explore/test_ga.py: more data for training.
+
+
 24-Nov-2019  Alexandre Trilla  <alex@atrilla.net>
 
   * explore/NeuralNetwork.py (MLP_GA): created.

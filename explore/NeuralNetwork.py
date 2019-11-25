@@ -569,9 +569,9 @@ def MLP_Sklearn(win, intin, wout, intout):
 # af is activation function
 # c cost function (fitness), 'sqerr', 'xent' (af must be logistic, default)
 # npopu is number of population candidates
-# mutp is mutation probability (sets one random weight to zero)
+# mutp is mutation probability (sets one random weight to a random value)
 # return grown/developed neural net instance
-def MLP_GA(inilay, x, t, nepoch, npopu, mutp=0.01, af=Logistic, c='sqerr'):
+def MLP_GA(inilay, x, t, nepoch, npopu, mutp=0.05, af=Logistic, c='sqerr'):
     # input 2 NN parents to be crossed
     # return child
     def _GA_Crossover(nn1, nn2):
@@ -640,7 +640,7 @@ def MLP_GA(inilay, x, t, nepoch, npopu, mutp=0.01, af=Logistic, c='sqerr'):
                 shap = i[midx].shape
                 flat = i[midx].flatten()
                 widx = int(np.random.rand()*len(flat))
-                flat[widx] = 0.0
+                flat[widx] = np.random.rand() - 0.5
                 i[midx] = flat.reshape(shap)
         popu.extend(newcand)
     # Return best candidate

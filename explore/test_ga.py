@@ -41,9 +41,15 @@ X = iris.data
 
 sx,sy = shuffle(X,y)
 
+cutoff = 120
+
+nn = NeuralNetwork.MLP([4,2,3])
+tcost = NeuralNetwork.MLP_Cost(nn, sx[cutoff:], y[cutoff:], 0.0)
+print("Init J = " + str(tcost))
+
 print("Training...")
-nn = NeuralNetwork.MLP_GA([4,2,3], sx[:100], y[:100], 10, 100)
+nn = NeuralNetwork.MLP_GA([4,2,3], sx[:cutoff], y[:cutoff], 10, 100)
 print("Testing...")
-tcost = NeuralNetwork.MLP_Cost(nn, sx[100:], y[100:], 0.0)
+tcost = NeuralNetwork.MLP_Cost(nn, sx[cutoff:], y[cutoff:], 0.0)
 print("J = " + str(tcost))
 
