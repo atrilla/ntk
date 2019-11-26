@@ -51,6 +51,7 @@ one.
 * [Multilayer Perceptron](https://github.com/atrilla/ntk/blob/master/explore/Multilayer.ipynb) - Backpropagation
 * [Time-Delay Neural Network](https://github.com/atrilla/ntk/blob/master/explore/Time-Delay.ipynb) - 1D Convolutional Neural Network
 * [Deep Neural Network](https://github.com/atrilla/ntk/blob/master/explore/Deep.ipynb) - ReLU
+* [Genetic Algorithm](https://github.com/atrilla/ntk/blob/master/explore/Genetic.ipynb) - Evolutionary Metaheuristic
 
 ## Other tests
 
