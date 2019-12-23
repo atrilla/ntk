@@ -46,18 +46,21 @@ is true, though, that neural networks are fraught with experimental details
 and experience makes the difference between a successful model and a skewed 
 one.
 
+The story of how neural nets were developed is fascinating. What follows
+is a collection of some of its renown models along with a toy implementation.
+
 ## Notebooks
 
-* [Multilayer Perceptron](https://github.com/atrilla/ntk/blob/master/explore/Multilayer.ipynb) - Backpropagation
-* [Time-Delay Neural Network](https://github.com/atrilla/ntk/blob/master/explore/Time-Delay.ipynb) - 1D Convolutional Neural Network
+* [Multilayer Perceptron](https://github.com/atrilla/ntk/blob/master/explore/Multilayer.ipynb) - Feed-forward, non-linear real-valued function, supervised gradient-descent learning (backpropagation)
+* [Time-Delay Neural Network](https://github.com/atrilla/ntk/blob/master/explore/Time-Delay.ipynb) - 1D Convolutional Neural Network, spreading filters
 * [Deep Neural Network](https://github.com/atrilla/ntk/blob/master/explore/Deep.ipynb) - ReLU
 * [Genetic Algorithm](https://github.com/atrilla/ntk/blob/master/explore/Genetic.ipynb) - Evolutionary Metaheuristic
 
 ## Other tests
 
-* Self-Organising Map - Kohonen Network
-* Autoencoder - Auto-associative Neural Network
-* Recurrent Neural Network - Elman/Jordan Network
+* Self-Organising Map - Kohonen Network, unsupervised competitive learning
+* Auto-encoder - Auto-associative Neural Network, denoising
+* Elman/Jordan Network - Partially-recurrent, context units
 * Reinforcement Learning - Adaline, Associative Reward-Penalty
 * Sensitivity Analysis - Profile method
 
