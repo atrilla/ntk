@@ -28,9 +28,11 @@ a “lean adaptation” procedure for neural networks.
 
 Artificial Neural Networks (ANNs) are interesting models in Artificial 
 Intelligence and Machine Learning because they are powerful enough to succeed 
-at solving many different problems. Historical evidence of their importance 
+at solving many different problems. Evidence of their importance 
 can be found as most leading technical books dedicate many pages to cover 
-them comprehensibly.
+them comprehensibly. Additionally, the 
+[history](https://github.com/atrilla/ntk/blob/master/explore/History.md)
+of how neural nets were originally conceived and developed is fascinating. 
 
 Overall, ANNs are general-purpose universal learners driven by data. They 
 conform to the connectionist learning approach, which is based on an 
@@ -46,8 +48,7 @@ is true, though, that neural networks are fraught with experimental details
 and experience makes the difference between a successful model and a skewed 
 one.
 
-The story of how neural nets were developed is fascinating. What follows
-is a collection of some of its renown models along with a toy implementation.
+What follows is a collection of some renown neural models along with a toy implementation.
 
 ## Notebooks
 
